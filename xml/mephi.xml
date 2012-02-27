@@ -9,7 +9,11 @@
       <group name='K6-361'>
         <student name='Данилин Егор'/>
 	<student name='Воронин Дмитрий'/>
+<<<<<<< HEAD
         <student name='лукьяненко Леонид'/>
+=======
+        <student name='Ильясова Нина'/>
+>>>>>>> 79869cbf065f1c77a507046653117c52df5bd5de
       </group>
     </department>
   </faculty>	

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mephi>
+  <faculty name='А'>
+  </faculty>
+  <faculty name='Т'>
+  </faculty>
+  <faculty name='К'>
+    <department name='Информационные технологии' number='36'>
+      <group name='K6-361'>
+        <student name='Данилин Егор'/>
+      </group>
+    </department>
+  </faculty>	
+
+</mephi>

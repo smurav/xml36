@@ -37,5 +37,6 @@ void MainWindow::on_actionOpen_triggered() {
 
 bool MainWindow::OpenXML(const QString &fileName) {
   ui->xml_tree->addTopLevelItem(new QTreeWidgetItem(QStringList(fileName)));
+  //ui->attibutes_list->addTopLevelItems(new QTreeWidgetItem());
   return true;
 }

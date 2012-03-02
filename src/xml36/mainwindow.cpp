@@ -1,6 +1,9 @@
 #include <QtGui>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include <QFile>
+#include <QDebug>
+#include <QTextStream>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -37,5 +40,26 @@ void MainWindow::on_actionOpen_triggered() {
 
 bool MainWindow::OpenXML(const QString &fileName) {
   ui->xml_tree->addTopLevelItem(new QTreeWidgetItem(QStringList(fileName)));
+  QFile file(fileName);
+  if (!file.open(QIODevice::ReadOnly))
+      qDebug()<<"Failed!"<<endl;
+  QTextStream stream(&file);
+  QString line = stream.readAll();
+      qDebug()<<line<<endl;
+  /*QString att, root, str;
+  int i=0;
+  while(i<line.length())
+  {
+      if (line[i]!="<")
+          str+=line[i];
+      else
+      {
+          i++;
+          root+=line[i];
+      }
+      if (line[i]==">")
+
+  } */
+
   return true;
 }

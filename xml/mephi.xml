@@ -8,14 +8,16 @@
     <department name='Информационные системы и технологии' number='36'>
       <group name='K6-361'>
 	<student name='Букарев Павел'/>
+        <student name='Воронин Дмитрий'/>
         <student name='Данилин Егор'/>
-	<student name='Воронин Дмитрий'/>
 	<student name='Игин Алексей'/>
-        <student name='Лукьяненко Леонид'/>
         <student name='Ильясова Нина'/>
+        <student name='Лукьяненко Леонид'/>
+        <student name='Нарбутович Анна'/>
+        <student name='Персиянов Алексей'/>
 	<student name='Фадеева Аня'/>
+        <student name='Щербаков Павел'/>
       </group>
     </department>
   </faculty>	
-
 </mephi>

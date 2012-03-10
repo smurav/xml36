@@ -4,18 +4,18 @@
   </faculty>
   <faculty name='Т'>
   </faculty>
-  <faculty name='К'>
+  <faculty name='К'> 
     <department name='Информационные системы и технологии' number='36'>
       <group name='K6-361'>
-	<student name='Букарев Павел'/>
+        <student name='Букарев Павел'/>
         <student name='Воронин Дмитрий'/>
         <student name='Данилин Егор'/>
-	<student name='Игин Алексей'/>
+        <student name='Игин Алексей'/>
         <student name='Ильясова Нина'/>
         <student name='Лукьяненко Леонид'/>
         <student name='Нарбутович Анна'/>
         <student name='Персиянов Алексей'/>
-	<student name='Фадеева Аня'/>
+        <student name='Фадеева Анна'/>
         <student name='Щербаков Павел'/>
       </group>
     </department>

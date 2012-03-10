@@ -74,11 +74,10 @@ bool MainWindow::OpenXML(const QString &fileName) {
   QString line = stream.readAll();
   QTreeWidgetItem* root;
   QString att, val;
-  QVector<QTreeWidgetItem*> wid;
-  QVector<int> num;
   line.remove(line.indexOf("<?"),line.indexOf("?>")+2); //удаляем cofig
   QString s(line);
   int i=0;
+  int level;
   while (line.size()!=0)
   {
       QString str = line.mid(line.indexOf("<"),line.indexOf(">"));
@@ -90,20 +89,25 @@ bool MainWindow::OpenXML(const QString &fileName) {
           QString buff(str);
           att = str.mid(0,str.indexOf("="));   //выводим атрибут
           val = Complex_tag(buff, IsShitItem);   //выводим значение
+          qDebug()<<"level at the end"<<level;
           buff = att.mid(0,att.indexOf(" "));
           buff = "</"+buff+">";
-          if (s.count(buff)==i)
-              {
-                  i=0;
-                  num.push_front(s.count(buff));
-              }
-          if (IsShitItem)
-              num.push_front(s.count(att));
-           line.remove(buff);
-           QTreeWidgetItem* p = new QTreeWidgetItem();
-           p->setText(0,att);
-           p->setText(1,val);
-           wid.push_front(p);
+          level=s.count(buff);
+          qDebug()<<level<<endl;
+          line.remove(buff);
+          if (i<level)
+          {
+              QTreeWidgetItem *parent = ui->attibutes_list->currentItem();
+              QTreeWidgetItem *newItem;
+              if (parent)
+                  parent->addChild(newItem);
+              else
+                  newItem = new QTreeWidgetItem(root);
+              newItem->setText(0,att);
+              newItem->setText(1,val);
+          }
+          else i=0;
+        i++;
        }
       else
       {
@@ -111,8 +115,7 @@ bool MainWindow::OpenXML(const QString &fileName) {
           root->setText(0,str);
           line.remove("</"+str+">");   //удаляем корень
       }
-      for (int i=0; i<num.size(); i++)
-      qDebug()<<num[i]<<endl;
+      qDebug()<<line<<endl;
   }
 
   return true;

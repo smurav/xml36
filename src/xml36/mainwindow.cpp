@@ -73,50 +73,51 @@ bool MainWindow::OpenXML(const QString &fileName) {
   QTextStream stream(&file);
   QString line = stream.readAll();
   QTreeWidgetItem* root;
+  QTreeWidgetItem* current;
   QString att, val;
   line.remove(line.indexOf("<?"),line.indexOf("?>")+2); //удаляем cofig
   QString s(line);
   int i=0;
   int level;
-  while (line.size()!=0)
+  while (line.size() != 0)
   {
       QString str = line.mid(line.indexOf("<"),line.indexOf(">"));
       line.remove(str); //удаляем тег из строки line
-      str.remove("<").remove(">");
       bool IsShitItem = str.contains("/>"); //true, если строка является листком
+      str.remove("<").remove(">");   
       if (str.contains("="))
       {
           QString buff(str);
           att = str.mid(0,str.indexOf("="));   //выводим атрибут
           val = Complex_tag(buff, IsShitItem);   //выводим значение
-          qDebug()<<"level at the end"<<level;
           buff = att.mid(0,att.indexOf(" "));
           buff = "</"+buff+">";
-          level=s.count(buff);
-          qDebug()<<level<<endl;
+          if (!IsShitItem)
+             level = s.count(buff);
+          else
+              level = s.count("/>");
           line.remove(buff);
-          if (i<level)
+          QTreeWidgetItem* newItem;
+          if (i < level)
           {
-              QTreeWidgetItem *parent = ui->attibutes_list->currentItem();
-              QTreeWidgetItem *newItem;
-              if (parent)
-                  parent->addChild(newItem);
-              else
-                  newItem = new QTreeWidgetItem(root);
+              i++;
+              newItem = new QTreeWidgetItem (current);
               newItem->setText(0,att);
               newItem->setText(1,val);
           }
-          else i=0;
-        i++;
+          if (i == level)
+          {
+              i=0;
+              current = newItem;
+          }
        }
       else
       {
           root = new QTreeWidgetItem(ui->attibutes_list);
+          current = root;
           root->setText(0,str);
           line.remove("</"+str+">");   //удаляем корень
       }
-      qDebug()<<line<<endl;
   }
-
   return true;
 }

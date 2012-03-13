@@ -39,7 +39,7 @@ void MainWindow::on_actionOpen_triggered() {
                           QMessageBox::Ok);
   }
 }
-
+QTreeWidgetItem* attribute;
 
 
 
@@ -47,8 +47,6 @@ void MainWindow::on_actionOpen_triggered() {
 void parse(QTreeWidgetItem* it,QString& s,bool& down){
     down=true;
     qDebug()<<s;
-    s.trimmed();//del
-    if (s.length()==1) return;
     QString subS=">";
     QString node="";
     QStringList attributes;
@@ -65,14 +63,20 @@ void parse(QTreeWidgetItem* it,QString& s,bool& down){
         s=" "+s;
         if (s[s.indexOf(">")-1]=='/') subS="/";
         while ((s.indexOf(subS)> s.indexOf("=")) && (s.indexOf("=")!=-1)){
+            attribute->addChild(new QTreeWidgetItem());
             s.trimmed();
             attributes.append(s.mid(0,s.indexOf("=")));
+            attribute->child(attribute->childCount()-1)->setText(0,s.mid(0,s.indexOf("=")));
             s.remove(0,s.indexOf("=")+1);
             s.trimmed();
-            if(s.indexOf(" ")>s.indexOf(subS)) min=s.indexOf(subS);
-            else min=s.indexOf(" ");
-            attributesValues.append(s.mid(0,min));
-            s.remove(0,min);
+            QString div=" ";
+            if (s[0]=='\'') {div='\''; s.remove(0,1);}
+            if (s[0]=='\"') {div='\"'; s.remove(0,1);}
+            if(s.indexOf(div)>s.indexOf(subS)) min=s.indexOf(subS);
+            else min=s.indexOf(div);
+            attributesValues.append((div+s.mid(0,min)).trimmed());
+            attribute->child(attribute->childCount()-1)->setText(1,(div+s.mid(0,min+1)).trimmed());
+            s.remove(0,min+1);
         }
         s.remove(0,s.indexOf(">")+1);
         if(subS=="/") return;
@@ -98,6 +102,7 @@ void parse(QTreeWidgetItem* it,QString& s,bool& down){
 
 bool MainWindow::OpenXML(const QString &fileName)
 {
+    attribute=new QTreeWidgetItem(ui->attibutes_list);
     QString s;
     QFile inputFile(fileName);
     inputFile.open(QIODevice::ReadOnly);

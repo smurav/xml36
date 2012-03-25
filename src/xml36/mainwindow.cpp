@@ -4,8 +4,7 @@
 #include <QFile>
 #include <QDebug>
 #include <QTextStream>
-#include <QTreeWidgetItem>
-#include <QString>
+#include <QStringList>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -40,9 +39,52 @@ void MainWindow::on_actionOpen_triggered() {
   }
 }
 
-bool MainWindow::OpenXML(const QString &fileName)
+
+void MainWindow::GetChilds(QDomNode node)
 {
-    ui->xml_tree->addTopLevelItem(new QTreeWidgetItem(QStringList(fileName)));
-   return true;
+    if (node.hasChildNodes()) {
+      QDomNodeList tempNodeList = node.childNodes();
+      for (int i = 0; i<tempNodeList.count(); ++i) {
+        if (tempNodeList.at(i).isComment()) {
+          node.removeChild(tempNodeList.at(i));
+        } else if (tempNodeList.at(i).hasChildNodes()) {
+          GetChilds(tempNodeList.at(i));
+        }
+      }
+    }
 }
+
+
+bool MainWindow::OpenXML(const QString &fileName) {
+
+  QDomDocument document;
+  {
+    QFile file(fileName);
+    if (false == file.open(QIODevice::ReadOnly))
+          qDebug()<<"Failed!"<<endl;
+    QTextStream inputStream(&file);
+    QString inputString = inputStream.readAll();
+    document.setContent(inputString);
+  }
+
+  QDomNodeList nodeList = document.childNodes();
+  for (int i = 0; i<nodeList.count(); ++i) {
+
+    if (nodeList.at(i).isProcessingInstruction())  // удаляем Processing Instruction
+      document.removeChild(nodeList.at(i));
+
+    if (nodeList.at(i).isComment())    // удаляем комментарии
+      document.removeChild(nodeList.at(i));
+
+    if (nodeList.at(i).hasChildNodes())
+       GetChilds(nodeList.at(i));
+  }
+
+  for (int i=0; i<nodeList.count(); i++) {
+      ui->xml_tree->addTopLevelItem(new QTreeWidgetItem(QStringList(nodeList.at(i).nodeName())));
+      ui->attibutes_list->addTopLevelItem(new QTreeWidgetItem(QStringList(nodeList.at(i).nodeValue())));
+}
+    return true;
+}
+
 

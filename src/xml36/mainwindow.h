@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include <QDomNode>
 
 namespace Ui {
     class MainWindow;
@@ -19,6 +20,7 @@ class MainWindow : public QMainWindow {
 
  private:
   bool OpenXML(const QString &fileName);
+  void GetChilds(QDomNode node);
 
  private:
   Ui::MainWindow *ui;

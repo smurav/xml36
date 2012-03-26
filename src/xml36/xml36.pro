@@ -5,7 +5,7 @@
 #-------------------------------------------------
 
 QT       += core gui
-
+QT += xml
 TARGET = xml36
 TEMPLATE = app
 

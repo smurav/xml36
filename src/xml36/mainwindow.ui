@@ -13,6 +13,10 @@
   <property name="windowTitle">
    <string>XML36</string>
   </property>
+  <property name="windowIcon">
+   <iconset resource="res/resource.qrc">
+    <normaloff>:/xml.png</normaloff>:/xml.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="spacing">
@@ -27,6 +31,12 @@
        <enum>Qt::Horizontal</enum>
       </property>
       <widget class="QTreeWidget" name="xml_tree">
+       <property name="showDropIndicator" stdset="0">
+        <bool>false</bool>
+       </property>
+       <property name="allColumnsShowFocus">
+        <bool>true</bool>
+       </property>
        <column>
         <property name="text">
          <string>Узел</string>
@@ -70,11 +80,16 @@
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuXML">
+    <property name="tearOffEnabled">
+     <bool>true</bool>
+    </property>
     <property name="title">
      <string>XML</string>
     </property>
-    <addaction name="actionAdd"/>
-    <addaction name="actionDelete"/>
+    <addaction name="actionAddNode"/>
+    <addaction name="actionRemoveNode"/>
+    <addaction name="actionAddAttribute"/>
+    <addaction name="actionRemoveAttribute"/>
     <addaction name="actionEdit"/>
    </widget>
    <addaction name="menu"/>
@@ -97,8 +112,10 @@
    <addaction name="actionOpen"/>
    <addaction name="actionSave"/>
    <addaction name="separator"/>
-   <addaction name="actionAdd"/>
-   <addaction name="actionDelete"/>
+   <addaction name="actionAddNode"/>
+   <addaction name="actionRemoveNode"/>
+   <addaction name="actionAddAttribute"/>
+   <addaction name="actionRemoveAttribute"/>
    <addaction name="actionEdit"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
@@ -140,28 +157,28 @@
     <string>Сохранить как ...</string>
    </property>
   </action>
-  <action name="actionAdd">
+  <action name="actionAddAttribute">
    <property name="icon">
     <iconset resource="res/resource.qrc">
-     <normaloff>:/plus.png</normaloff>:/plus.png</iconset>
+     <normaloff>:/attribute_add.png</normaloff>:/attribute_add.png</iconset>
    </property>
    <property name="text">
-    <string>Добавить</string>
+    <string>Добавить атрибут</string>
    </property>
    <property name="toolTip">
-    <string>Добавить</string>
+    <string>Добавить атрибут</string>
    </property>
   </action>
-  <action name="actionDelete">
+  <action name="actionRemoveAttribute">
    <property name="icon">
     <iconset resource="res/resource.qrc">
-     <normaloff>:/minus.png</normaloff>:/minus.png</iconset>
+     <normaloff>:/attribute_remove.png</normaloff>:/attribute_remove.png</iconset>
    </property>
    <property name="text">
-    <string>Удалить</string>
+    <string>Удалить атрибут</string>
    </property>
    <property name="toolTip">
-    <string>Удалить</string>
+    <string>Удалить атрибут</string>
    </property>
   </action>
   <action name="actionEdit">
@@ -182,6 +199,30 @@
    </property>
    <property name="toolTip">
     <string>Выход</string>
+   </property>
+  </action>
+  <action name="actionAddNode">
+   <property name="icon">
+    <iconset resource="res/resource.qrc">
+     <normaloff>:/node_add.png</normaloff>:/node_add.png</iconset>
+   </property>
+   <property name="text">
+    <string>Добавить узел</string>
+   </property>
+   <property name="toolTip">
+    <string>Добавить узел</string>
+   </property>
+  </action>
+  <action name="actionRemoveNode">
+   <property name="icon">
+    <iconset resource="res/resource.qrc">
+     <normaloff>:/node_remove.png</normaloff>:/node_remove.png</iconset>
+   </property>
+   <property name="text">
+    <string>Удалить узел</string>
+   </property>
+   <property name="toolTip">
+    <string>Удалить узел</string>
    </property>
   </action>
  </widget>

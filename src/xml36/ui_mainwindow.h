@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon Mar 26 09:22:46 2012
+** Created: Mon Mar 26 10:21:13 2012
 **      by: Qt User Interface Compiler version 4.8.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -34,10 +34,12 @@ public:
     QAction *actionNew;
     QAction *actionSave;
     QAction *actionSaveAs;
-    QAction *actionAdd;
-    QAction *actionDelete;
+    QAction *actionAddAttribute;
+    QAction *actionRemoveAttribute;
     QAction *actionEdit;
     QAction *actionExit;
+    QAction *actionAddNode;
+    QAction *actionRemoveNode;
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout;
     QSplitter *splitter;
@@ -54,40 +56,53 @@ public:
         if (MainWindow->objectName().isEmpty())
             MainWindow->setObjectName(QString::fromUtf8("MainWindow"));
         MainWindow->resize(842, 535);
+        QIcon icon;
+        icon.addFile(QString::fromUtf8(":/xml.png"), QSize(), QIcon::Normal, QIcon::Off);
+        MainWindow->setWindowIcon(icon);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
-        QIcon icon;
-        icon.addFile(QString::fromUtf8(":/open.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionOpen->setIcon(icon);
+        QIcon icon1;
+        icon1.addFile(QString::fromUtf8(":/open.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionOpen->setIcon(icon1);
         actionNew = new QAction(MainWindow);
         actionNew->setObjectName(QString::fromUtf8("actionNew"));
-        QIcon icon1;
-        icon1.addFile(QString::fromUtf8(":/new.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionNew->setIcon(icon1);
+        QIcon icon2;
+        icon2.addFile(QString::fromUtf8(":/new.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionNew->setIcon(icon2);
         actionSave = new QAction(MainWindow);
         actionSave->setObjectName(QString::fromUtf8("actionSave"));
-        QIcon icon2;
-        icon2.addFile(QString::fromUtf8(":/save.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionSave->setIcon(icon2);
+        QIcon icon3;
+        icon3.addFile(QString::fromUtf8(":/save.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionSave->setIcon(icon3);
         actionSaveAs = new QAction(MainWindow);
         actionSaveAs->setObjectName(QString::fromUtf8("actionSaveAs"));
-        actionAdd = new QAction(MainWindow);
-        actionAdd->setObjectName(QString::fromUtf8("actionAdd"));
-        QIcon icon3;
-        icon3.addFile(QString::fromUtf8(":/plus.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionAdd->setIcon(icon3);
-        actionDelete = new QAction(MainWindow);
-        actionDelete->setObjectName(QString::fromUtf8("actionDelete"));
+        actionAddAttribute = new QAction(MainWindow);
+        actionAddAttribute->setObjectName(QString::fromUtf8("actionAddAttribute"));
         QIcon icon4;
-        icon4.addFile(QString::fromUtf8(":/minus.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionDelete->setIcon(icon4);
+        icon4.addFile(QString::fromUtf8(":/attribute_add.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionAddAttribute->setIcon(icon4);
+        actionRemoveAttribute = new QAction(MainWindow);
+        actionRemoveAttribute->setObjectName(QString::fromUtf8("actionRemoveAttribute"));
+        QIcon icon5;
+        icon5.addFile(QString::fromUtf8(":/attribute_remove.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRemoveAttribute->setIcon(icon5);
         actionEdit = new QAction(MainWindow);
         actionEdit->setObjectName(QString::fromUtf8("actionEdit"));
-        QIcon icon5;
-        icon5.addFile(QString::fromUtf8(":/pencil.png"), QSize(), QIcon::Normal, QIcon::Off);
-        actionEdit->setIcon(icon5);
+        QIcon icon6;
+        icon6.addFile(QString::fromUtf8(":/pencil.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionEdit->setIcon(icon6);
         actionExit = new QAction(MainWindow);
         actionExit->setObjectName(QString::fromUtf8("actionExit"));
+        actionAddNode = new QAction(MainWindow);
+        actionAddNode->setObjectName(QString::fromUtf8("actionAddNode"));
+        QIcon icon7;
+        icon7.addFile(QString::fromUtf8(":/node_add.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionAddNode->setIcon(icon7);
+        actionRemoveNode = new QAction(MainWindow);
+        actionRemoveNode->setObjectName(QString::fromUtf8("actionRemoveNode"));
+        QIcon icon8;
+        icon8.addFile(QString::fromUtf8(":/node_remove.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionRemoveNode->setIcon(icon8);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         horizontalLayout = new QHBoxLayout(centralWidget);
@@ -99,6 +114,7 @@ public:
         splitter->setOrientation(Qt::Horizontal);
         xml_tree = new QTreeWidget(splitter);
         xml_tree->setObjectName(QString::fromUtf8("xml_tree"));
+        xml_tree->setProperty("showDropIndicator", QVariant(false));
         splitter->addWidget(xml_tree);
         attributes_list = new QTreeWidget(splitter);
         attributes_list->setObjectName(QString::fromUtf8("attributes_list"));
@@ -114,6 +130,7 @@ public:
         menu->setObjectName(QString::fromUtf8("menu"));
         menuXML = new QMenu(menuBar);
         menuXML->setObjectName(QString::fromUtf8("menuXML"));
+        menuXML->setTearOffEnabled(true);
         MainWindow->setMenuBar(menuBar);
         mainToolBar = new QToolBar(MainWindow);
         mainToolBar->setObjectName(QString::fromUtf8("mainToolBar"));
@@ -131,15 +148,19 @@ public:
         menu->addAction(actionSaveAs);
         menu->addSeparator();
         menu->addAction(actionExit);
-        menuXML->addAction(actionAdd);
-        menuXML->addAction(actionDelete);
+        menuXML->addAction(actionAddNode);
+        menuXML->addAction(actionRemoveNode);
+        menuXML->addAction(actionAddAttribute);
+        menuXML->addAction(actionRemoveAttribute);
         menuXML->addAction(actionEdit);
         mainToolBar->addAction(actionNew);
         mainToolBar->addAction(actionOpen);
         mainToolBar->addAction(actionSave);
         mainToolBar->addSeparator();
-        mainToolBar->addAction(actionAdd);
-        mainToolBar->addAction(actionDelete);
+        mainToolBar->addAction(actionAddNode);
+        mainToolBar->addAction(actionRemoveNode);
+        mainToolBar->addAction(actionAddAttribute);
+        mainToolBar->addAction(actionRemoveAttribute);
         mainToolBar->addAction(actionEdit);
 
         retranslateUi(MainWindow);
@@ -161,13 +182,13 @@ public:
         actionSave->setToolTip(QApplication::translate("MainWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 XML \320\264\320\276\320\272\321\203\320\274\320\265\320\275\321\202", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         actionSaveAs->setText(QApplication::translate("MainWindow", "\320\241\320\276\321\205\321\200\320\260\320\275\320\270\321\202\321\214 \320\272\320\260\320\272 ...", 0, QApplication::UnicodeUTF8));
-        actionAdd->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", 0, QApplication::UnicodeUTF8));
+        actionAddAttribute->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\260\321\202\321\200\320\270\320\261\321\203\321\202", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
-        actionAdd->setToolTip(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214", 0, QApplication::UnicodeUTF8));
+        actionAddAttribute->setToolTip(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \320\260\321\202\321\200\320\270\320\261\321\203\321\202", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
-        actionDelete->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0, QApplication::UnicodeUTF8));
+        actionRemoveAttribute->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \320\260\321\202\321\200\320\270\320\261\321\203\321\202", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
-        actionDelete->setToolTip(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214", 0, QApplication::UnicodeUTF8));
+        actionRemoveAttribute->setToolTip(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \320\260\321\202\321\200\320\270\320\261\321\203\321\202", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         actionEdit->setText(QApplication::translate("MainWindow", "\320\240\320\265\320\264\320\260\320\272\321\202\320\270\321\200\320\276\320\262\320\260\321\202\321\214", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
@@ -176,6 +197,14 @@ public:
         actionExit->setText(QApplication::translate("MainWindow", "\320\222\321\213\321\205\320\276\320\264", 0, QApplication::UnicodeUTF8));
 #ifndef QT_NO_TOOLTIP
         actionExit->setToolTip(QApplication::translate("MainWindow", "\320\222\321\213\321\205\320\276\320\264", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        actionAddNode->setText(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\203\320\267\320\265\320\273", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        actionAddNode->setToolTip(QApplication::translate("MainWindow", "\320\224\320\276\320\261\320\260\320\262\320\270\321\202\321\214 \321\203\320\267\320\265\320\273", 0, QApplication::UnicodeUTF8));
+#endif // QT_NO_TOOLTIP
+        actionRemoveNode->setText(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \321\203\320\267\320\265\320\273", 0, QApplication::UnicodeUTF8));
+#ifndef QT_NO_TOOLTIP
+        actionRemoveNode->setToolTip(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \321\203\320\267\320\265\320\273", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
         QTreeWidgetItem *___qtreewidgetitem = xml_tree->headerItem();
         ___qtreewidgetitem->setText(0, QApplication::translate("MainWindow", "\320\243\320\267\320\265\320\273", 0, QApplication::UnicodeUTF8));

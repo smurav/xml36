@@ -19,8 +19,10 @@ class MainWindow : public QMainWindow {
  private slots:
   void on_actionOpen_triggered();
   void OnNodeQTreeWidgetPressed( QTreeWidgetItem *clicked_item, int column );
+  void on_xml_tree_itemExpanded(QTreeWidgetItem *item);
+  void on_xml_tree_itemCollapsed(QTreeWidgetItem *item);
 
- private:
+private:
   bool OpenXML(const QString &fileName);
   QDomNode FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item);
   QDomNode FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item, int &index_of_child_in_child_list);

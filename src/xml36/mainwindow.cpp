@@ -82,6 +82,7 @@ void MainWindow::BuildXmlNodeTreeR(QDomNode xml_dom_node,QTreeWidgetItem *node_t
         if (xml_dom_node.isElement()){
             int node_tree_column_node=0;
             node_tree_item->setText(node_tree_column_node, xml_dom_node.toElement().tagName());
+            node_tree_item->setIcon(0, QIcon(":/node_closed.png"));
             if (xml_dom_node.hasChildNodes()){
                 node_tree_item->addChild(new QTreeWidgetItem());
                 BuildXmlNodeTreeR(xml_dom_node.firstChild(),node_tree_item->child(node_tree_item->childCount()-1));
@@ -106,7 +107,10 @@ bool MainWindow::OpenXML(const QString &fileName){
      input_file.close();
     QDomNode xml_dom_node = xml_document.firstChild();
     QTreeWidgetItem *node_tree_item=new QTreeWidgetItem(ui->xml_tree);
-    BuildXmlNodeTreeR(xml_dom_node, node_tree_item);
+    if (node_tree_item) {
+      node_tree_item->setIcon(0, QIcon(":/node_closed.png"));
+      BuildXmlNodeTreeR(xml_dom_node, node_tree_item);
+    }
    return true;
 }
 
@@ -174,3 +178,13 @@ bool MainWindow::OpenXML(const QString &fileName){
 //        QTreeWidgetItem* item=new QTreeWidgetItem(ui->xml_tree);
 //        bool down=true;
 //        parse(item,s,down);
+
+void MainWindow::on_xml_tree_itemExpanded(QTreeWidgetItem *item)
+{
+    item->setIcon(0, QIcon(":/node_opened.png"));
+}
+
+void MainWindow::on_xml_tree_itemCollapsed(QTreeWidgetItem *item)
+{
+    item->setIcon(0, QIcon(":/node_closed.png"));
+}

@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon Mar 26 10:21:13 2012
+** Created: Mon Mar 26 10:25:20 2012
 **      by: Qt User Interface Compiler version 4.8.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -115,6 +115,7 @@ public:
         xml_tree = new QTreeWidget(splitter);
         xml_tree->setObjectName(QString::fromUtf8("xml_tree"));
         xml_tree->setProperty("showDropIndicator", QVariant(false));
+        xml_tree->setAllColumnsShowFocus(true);
         splitter->addWidget(xml_tree);
         attributes_list = new QTreeWidget(splitter);
         attributes_list->setObjectName(QString::fromUtf8("attributes_list"));

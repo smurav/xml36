@@ -1,5 +1,10 @@
 <RCC>
     <qresource prefix="/">
         <file>open.png</file>
+        <file>minus.png</file>
+        <file>new.png</file>
+        <file>pencil.png</file>
+        <file>plus.png</file>
+        <file>save.png</file>
     </qresource>
 </RCC>

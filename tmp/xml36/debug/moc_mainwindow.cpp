@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Mon Mar 26 10:15:23 2012
+** Created: Wed Apr 11 00:57:26 2012
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.0)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        6,       // revision
        0,       // classname
        0,    0, // classinfo
-       4,   14, // methods
+      18,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -35,6 +35,20 @@ static const uint qt_meta_data_MainWindow[] = {
       58,   38,   11,   11, 0x08,
      110,  105,   11,   11, 0x08,
      153,  105,   11,   11, 0x08,
+     197,   11,   11,   11, 0x08,
+     225,   11,   11,   11, 0x08,
+     251,   11,   11,   11, 0x08,
+     297,  285,   11,   11, 0x08,
+     343,  285,   11,   11, 0x08,
+     402,   11,   11,   11, 0x08,
+     428,   11,   11,   11, 0x08,
+     465,  285,   11,   11, 0x08,
+     518,  285,   11,   11, 0x08,
+     571,   11,   11,   11, 0x08,
+     600,  285,   11,   11, 0x08,
+     652,   11,   11,   11, 0x08,
+     684,  285,   11,   11, 0x08,
+     736,  730,   11,   11, 0x08,
 
        0        // eod
 };
@@ -45,6 +59,20 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "OnNodeQTreeWidgetPressed(QTreeWidgetItem*,int)\0"
     "item\0on_xml_tree_itemExpanded(QTreeWidgetItem*)\0"
     "on_xml_tree_itemCollapsed(QTreeWidgetItem*)\0"
+    "on_actionSaveAs_triggered()\0"
+    "on_actionSave_triggered()\0"
+    "on_actionAddAttribute_triggered()\0"
+    "item,column\0on_xml_tree_itemClicked(QTreeWidgetItem*,int)\0"
+    "on_attributes_list_itemDoubleClicked(QTreeWidgetItem*,int)\0"
+    "on_actionEdit_triggered()\0"
+    "on_actionRemoveAttribute_triggered()\0"
+    "on_attributes_list_itemClicked(QTreeWidgetItem*,int)\0"
+    "on_attributes_list_itemChanged(QTreeWidgetItem*,int)\0"
+    "on_actionAddNode_triggered()\0"
+    "on_xml_tree_itemDoubleClicked(QTreeWidgetItem*,int)\0"
+    "on_actionRemoveNode_triggered()\0"
+    "on_xml_tree_itemChanged(QTreeWidgetItem*,int)\0"
+    "index\0on_xml_tree_clicked(QModelIndex)\0"
 };
 
 void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, void **_a)
@@ -57,6 +85,20 @@ void MainWindow::qt_static_metacall(QObject *_o, QMetaObject::Call _c, int _id, 
         case 1: _t->OnNodeQTreeWidgetPressed((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
         case 2: _t->on_xml_tree_itemExpanded((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1]))); break;
         case 3: _t->on_xml_tree_itemCollapsed((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1]))); break;
+        case 4: _t->on_actionSaveAs_triggered(); break;
+        case 5: _t->on_actionSave_triggered(); break;
+        case 6: _t->on_actionAddAttribute_triggered(); break;
+        case 7: _t->on_xml_tree_itemClicked((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 8: _t->on_attributes_list_itemDoubleClicked((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 9: _t->on_actionEdit_triggered(); break;
+        case 10: _t->on_actionRemoveAttribute_triggered(); break;
+        case 11: _t->on_attributes_list_itemClicked((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 12: _t->on_attributes_list_itemChanged((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 13: _t->on_actionAddNode_triggered(); break;
+        case 14: _t->on_xml_tree_itemDoubleClicked((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 15: _t->on_actionRemoveNode_triggered(); break;
+        case 16: _t->on_xml_tree_itemChanged((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< int(*)>(_a[2]))); break;
+        case 17: _t->on_xml_tree_clicked((*reinterpret_cast< const QModelIndex(*)>(_a[1]))); break;
         default: ;
         }
     }
@@ -94,9 +136,9 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
     if (_id < 0)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
-        if (_id < 4)
+        if (_id < 18)
             qt_static_metacall(this, _c, _id, _a);
-        _id -= 4;
+        _id -= 18;
     }
     return _id;
 }

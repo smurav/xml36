@@ -1,21 +1,18 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version='1.0' encoding='UTF-8'?>
 <mephi>
-  <faculty name='А'>
-  </faculty>
-  <faculty name='Т'>
-  </faculty>
-  <faculty name='К'>
-    <department name='Информационные системы и технологии' number='36'>
-      <group name='K6-361'>
-	<student name='Букарев Павел'/>
-        <student name='Данилин Егор'/>
-	<student name='Воронин Дмитрий'/>
-	<student name='Игин Алексей'/>
-        <student name='Лукьяненко Леонид'/>
-        <student name='Ильясова Нина'/>
-	<student name='Фадеева Аня'/>
-      </group>
-    </department>
-  </faculty>	
-
+    <faculty name="A"/>
+    <faculty name="Т"/>
+    <faculty name="K">
+        <department number="36" name="Информационные системы и технологии">
+            <group name="K6-361">
+                <student name="Букарев Павел"/>
+                <student name="Данилин Егор"/>
+                <student name="Воронин Дмитрий"/>
+                <student name="Игин Алексей"/>
+                <student name="Лукьяненко Леонид"/>
+                <student name="Ильясова Нина"/>
+                <student name="Фадеева Анна"/>
+            </group>
+        </department>
+    </faculty>
 </mephi>

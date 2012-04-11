@@ -27,22 +27,22 @@ MainWindow::~MainWindow()
 }
 
 void MainWindow::on_actionOpen_triggered() {
-  QString file_name = QFileDialog::getOpenFileName(this,
+  xml_file_name = QFileDialog::getOpenFileName(this,
                                                    tr("Выберите XML-файл"),
                                                    "..",
                                                    tr("XML-файлы (*.xml)"));
 
-  if (0 == file_name.length())
+  if (0 == xml_file_name.length())
     return;
 
   QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-  bool opening_result = OpenXML(file_name);
+  bool opening_result = OpenXML(xml_file_name);
   QApplication::restoreOverrideCursor();
 
   if (false == opening_result) {
 
     QMessageBox::critical(this, tr("Открытие файла"),
-                          tr("Ошибка открытия файла %1").arg(file_name),
+                          tr("Ошибка открытия файла %1").arg(xml_file_name),
                           QMessageBox::Ok);
   }
 }
@@ -57,6 +57,7 @@ QDomNode MainWindow::FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item){
     }
 }
 
+
 void MainWindow::OnNodeQTreeWidgetPressed(QTreeWidgetItem *clicked_item, int column){
     QDomNode xml_dom_node_to_display=this->FindNecessaryDomNodeR(clicked_item);
     if (!xml_dom_node_to_display.isNull()){
@@ -64,14 +65,12 @@ void MainWindow::OnNodeQTreeWidgetPressed(QTreeWidgetItem *clicked_item, int col
         if(xml_dom_node_to_display.isElement()){
             int attribute_tree_column_attribute=0;
             int attribute_tree_column_value=1;
-            const int xml_attributes_count=2;
-            const QString xml_attributes[xml_attributes_count]={"name","number"};
-            for(int i=0;i<xml_attributes_count;i++){
-                if(xml_dom_node_to_display.toElement().hasAttribute(xml_attributes[i])){
-                    QTreeWidgetItem *attribute_tree_item=new QTreeWidgetItem(ui->attributes_list);
-                    attribute_tree_item->setText(attribute_tree_column_attribute,xml_attributes[i]);
-                    attribute_tree_item->setText(attribute_tree_column_value, xml_dom_node_to_display.toElement().attributeNode(xml_attributes[i]).value());
-                }
+            QDomNamedNodeMap xml_attributes=xml_dom_node_to_display.attributes();
+            for(int i=0;i<xml_attributes.length();i++){
+                QTreeWidgetItem *attribute_tree_item=new QTreeWidgetItem(ui->attributes_list);
+                attribute_tree_item->setText(attribute_tree_column_attribute,xml_attributes.item(i).nodeName());
+                attribute_tree_item->setText(attribute_tree_column_value, xml_attributes.item(i).nodeValue());
+                attribute_tree_item->setFlags(Qt::ItemIsSelectable | Qt::ItemIsEnabled | Qt::ItemIsEditable);
             }
         }
     }
@@ -115,70 +114,6 @@ bool MainWindow::OpenXML(const QString &fileName){
 }
 
 
-// MY PARSER
-
-//QTreeWidgetItem* attribute;
-//void parse(QTreeWidgetItem* it,QString& s,bool& down){
-//    down=true;
-//    QString subS=">";
-//    QString node="";
-//    s.remove(0,s.indexOf("<")+1);
-//    s.trimmed();
-//    if (s[0]!='/'){
-//        int min=0;
-//        if(s.indexOf(" ")>s.indexOf(">")) min=s.indexOf(">");
-//        else min=s.indexOf(" ");
-//        it->setText(0,s.mid(0,min));
-//        s.remove(0,min);
-//        s=" "+s;
-//        if (s[s.indexOf(">")-1]=='/') subS="/";
-//        while ((s.indexOf(subS)> s.indexOf("=")) && (s.indexOf("=")!=-1)){
-//            attribute->addChild(new QTreeWidgetItem());
-//            s.trimmed();
-//            attribute->child(attribute->childCount()-1)->setText(0,s.mid(0,s.indexOf("=")));
-//            s.remove(0,s.indexOf("=")+1);
-//            s.trimmed();
-//            QString div=" ";
-//            if (s[0]=='\'') {div='\''; s.remove(0,1);}
-//            if (s[0]=='\"') {div='\"'; s.remove(0,1);}
-//            if(s.indexOf(div)>s.indexOf(subS)) min=s.indexOf(subS);
-//            else min=s.indexOf(div);
-//            attribute->child(attribute->childCount()-1)->setText(1,(div+s.mid(0,min+1)).trimmed());
-//            s.remove(0,min+1);
-//        }
-//        s.remove(0,s.indexOf(">")+1);
-//        if(subS=="/") return;
-//    }  else {
-//        s.remove(0,s.indexOf(">")+1);
-//        it->parent()->takeChild(it->parent()->childCount()-1);
-//        down=false;
-//        return;
-//    }
-//    while(s.length()>2){
-//        if(down){
-//            it->addChild(new QTreeWidgetItem());
-//            parse(it->child(it->childCount()-1),s,down);
-//        }
-//        else {
-//            it->parent()->addChild(new QTreeWidgetItem());
-//            parse(it->parent()->child(it->parent()->childCount()-1),s,down);
-//        }
-//    }
-//    return;
-//}
-
-//MainWindow::OpenXML
-//    attribute=new QTreeWidgetItem(ui->attibutes_list);
-//    QString s;
-//    QFile inputFile(fileName);
-//    inputFile.open(QIODevice::ReadOnly);
-//    QTextStream in(&inputFile);
-//        s=in.readAll();
-//        s.remove(0,s.indexOf(">")+1);
-//        QTreeWidgetItem* item=new QTreeWidgetItem(ui->xml_tree);
-//        bool down=true;
-//        parse(item,s,down);
-
 void MainWindow::on_xml_tree_itemExpanded(QTreeWidgetItem *item)
 {
     item->setIcon(0, QIcon(":/node_opened.png"));
@@ -187,4 +122,119 @@ void MainWindow::on_xml_tree_itemExpanded(QTreeWidgetItem *item)
 void MainWindow::on_xml_tree_itemCollapsed(QTreeWidgetItem *item)
 {
     item->setIcon(0, QIcon(":/node_closed.png"));
+}
+
+void MainWindow::on_actionSaveAs_triggered()
+{
+    const int IndentSize = 4;
+    QString file_name=QFileDialog::getSaveFileName(this, tr("Выберите файл"), "..", tr("XML-файлы (*.xml)"));
+    QFile file(file_name);
+    if(file.open(QIODevice::WriteOnly))
+    {
+        QTextStream out(&file);
+        xml_document.save(out, IndentSize);
+        xml_file_name=file_name;
+    }
+}
+
+void MainWindow::on_actionSave_triggered()
+{
+    const int IndentSize = 4;
+    QFile file(xml_file_name);
+    if(file.open(QIODevice::WriteOnly))
+    {
+        QTextStream out(&file);
+        xml_document.save(out, IndentSize);
+    }
+}
+
+void MainWindow::on_actionAddAttribute_triggered()
+{
+    QDomNode xml_dom_node_to_edit=this->FindNecessaryDomNodeR(checked_item);
+    xml_dom_node_to_edit.toElement().setAttribute("[NoData]", "[NoData]");
+
+    QTreeWidgetItem* new_item = new QTreeWidgetItem;
+    new_item->setText(0, xml_dom_node_to_edit.attributes().item(0).nodeName());
+    new_item->setText(1, xml_dom_node_to_edit.attributes().item(0).nodeValue());
+
+
+    ui->attributes_list->insertTopLevelItem(0, new_item);
+}
+
+
+
+
+void MainWindow::on_xml_tree_itemClicked(QTreeWidgetItem *item, int column)
+{
+    checked_item = item;
+    if(to_edit) item->treeWidget()->openPersistentEditor(item, column);
+}
+
+void MainWindow::on_attributes_list_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    item->treeWidget()->openPersistentEditor(item, column);
+}
+
+void MainWindow::on_actionEdit_triggered()
+{
+    to_edit = true;
+}
+
+void MainWindow::on_actionRemoveAttribute_triggered()
+{
+    QDomNode xml_dom_node_to_edit=this->FindNecessaryDomNodeR(checked_item);
+    xml_dom_node_to_edit.removeChild(xml_dom_node_to_edit.attributes().item(0));//ui->attributes_list->indexOfTopLevelItem(ui->attributes_list->currentItem())));
+}
+
+void MainWindow::on_attributes_list_itemClicked(QTreeWidgetItem *item, int column)
+{
+    if(to_edit) item->treeWidget()->openPersistentEditor(item, column);
+}
+
+void MainWindow::on_attributes_list_itemChanged(QTreeWidgetItem *changed_item, int changed_column)
+{
+    changed_item->treeWidget()->closePersistentEditor(changed_item, changed_column);
+    to_edit = false;
+    QDomNode xml_dom_node_to_edit=this->FindNecessaryDomNodeR(checked_item);
+    QDomNamedNodeMap node_map=xml_dom_node_to_edit.toElement().attributes();
+    if(1 == changed_column)
+        node_map.item(changed_item->treeWidget()->indexOfTopLevelItem(changed_item)).setNodeValue(changed_item->text(1));
+}
+
+void MainWindow::on_actionAddNode_triggered()
+{
+    QTreeWidgetItem* new_item = new QTreeWidgetItem;
+    new_item->setText(0, "new");
+    new_item->setIcon(0, QIcon(":/node_closed.png"));
+    checked_item->addChild(new_item);
+}
+
+void MainWindow::on_xml_tree_itemDoubleClicked(QTreeWidgetItem *item, int column)
+{
+    item->treeWidget()->openPersistentEditor(item, column);
+}
+
+void MainWindow::on_actionRemoveNode_triggered()
+{
+    if(checked_item != NULL)
+        if(-1 == ui->xml_tree->indexOfTopLevelItem(checked_item)){
+            QDomNode node_to_edit = this->FindNecessaryDomNodeR(checked_item);
+            node_to_edit.parentNode().removeChild(node_to_edit);
+            checked_item->parent()->removeChild(checked_item);
+        }
+        else {
+            xml_document.clear();
+            ui->xml_tree->clear();
+        }
+}
+
+void MainWindow::on_xml_tree_itemChanged(QTreeWidgetItem *item, int column)
+{
+    item->treeWidget()->closePersistentEditor(item, column);
+    to_edit = false;
+}
+
+void MainWindow::on_xml_tree_clicked(const QModelIndex &index)
+{
+
 }

@@ -44,6 +44,12 @@
        </column>
       </widget>
       <widget class="QTreeWidget" name="attributes_list">
+       <property name="editTriggers">
+        <set>QAbstractItemView::DoubleClicked|QAbstractItemView::EditKeyPressed</set>
+       </property>
+       <property name="selectionBehavior">
+        <enum>QAbstractItemView::SelectItems</enum>
+       </property>
        <column>
         <property name="text">
          <string>Атрибут</string>

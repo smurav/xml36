@@ -379,19 +379,6 @@ void MainWindow::on_actionAdd_triggered()
 }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
 //#include <QtGui>
 //#include "mainwindow.h"
 //#include "ui_mainwindow.h"

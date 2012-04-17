@@ -6,242 +6,205 @@
 #include <QTreeWidgetItem>
 #include <QString>
 #include <QAbstractItemView>
-
+#include "addnodedialog.h"
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
-    ui(new Ui::MainWindow)
-{
-    ui->setupUi(this);
-    connect(ui->xml_tree, SIGNAL(itemClicked(QTreeWidgetItem*,int)),
-            this,SLOT(OnNodeQTreeWidgetPressed(QTreeWidgetItem*,int)));
-       ui->actionSave->setEnabled(false);
-       ui->actionSaveAs->setEnabled(false);
+    ui_(new Ui::MainWindow) {
+  ui_->setupUi(this);
+  untitled_ = false;
+  modified_ = false;
+  xml_doc_ptr_ = 0;
 }
 
-MainWindow::~MainWindow()
-{
-    delete ui;
+MainWindow::~MainWindow() {
+  FreeXMLDocument();
+  delete ui_;
+  ui_ = 0;
 }
 
+void MainWindow::closeEvent(QCloseEvent* pEv) {
+  if (MaybeSave())
+    pEv->accept();
+  else
+    pEv->ignore();
+}
 
-void MainWindow::on_actionOpen_triggered() {
-  QString file_name = QFileDialog::getOpenFileName(this,
-                                                   tr("Выберите XML-файл"),
-                                                   "..",
-                                                   tr("XML-файлы (*.xml)"));
-
-  if (0 == file_name.length())
+void MainWindow::on_actionNew_triggered() {
+  if (!MaybeSave())
     return;
 
-  QApplication::setOverrideCursor(QCursor(Qt::WaitCursor));
-  currentFilePath = file_name;
-  bool opening_result = OpenXML(file_name);
-  QApplication::restoreOverrideCursor();
-  setCurrentFile(file_name);
-  isDocumentModified = false;
-  ui->actionSaveAs->setEnabled(true);
+  static int sequence_number = 1;
+  SetCurrentFileName(tr("doc%1.xml").arg(sequence_number++), true);
+  SetModified(true);
 
-  if (false == opening_result) {
+  FreeXMLDocument();
+  xml_doc_ptr_ = xmlNewDoc(BAD_CAST "1.0");
+  ui_->actionAddNode->setEnabled(0 != xml_doc_ptr_);
+}
 
-    QMessageBox::critical(this, tr("Открытие файла"),
-                          tr("Ошибка открытия файла %1").arg(file_name),
+void MainWindow::on_actionOpen_triggered() {
+  if (!MaybeSave())
+    return;
+
+  QString file_name_ = QFileDialog::getOpenFileName(this,
+                                                    tr("Выберите XML-файл"),
+                                                    "..",
+                                                    tr("XML-файлы (*.xml)"));
+  OpenXMLDocument(file_name_);
+}
+
+bool MainWindow::on_actionSave_triggered() {
+  if (untitled_)
+    return on_actionSaveAs_triggered();
+  else
+    return SaveXMLDocument(file_name_);
+}
+
+bool MainWindow::on_actionSaveAs_triggered() {
+  QString file_name = QFileDialog::getSaveFileName(this,
+                                                   tr("Сохранить как"),
+                                                   ".",
+                                                   tr("XML-файлы (*.xml)"));
+
+  return SaveXMLDocument(file_name);
+}
+
+bool MainWindow::OpenXMLDocument(const QString &file_name) {
+  FreeXMLDocument();
+  return true;
+}
+
+bool MainWindow::SaveXMLDocument(const QString &file_name) {
+  if (0 == xml_doc_ptr_)
+    return false;
+
+  if (-1 == xmlSaveFormatFileEnc(file_name.toLocal8Bit(),
+                                 xml_doc_ptr_,
+                                 "UTF-8",
+                                 1)) {
+    QMessageBox::critical(this, tr("Сохранение XML документа"),
+                          tr("Ошибка сохранения файла %1").arg(file_name),
                           QMessageBox::Ok);
+    return false;
   }
+
+  SetCurrentFileName(file_name, false);
+  SetModified(false);
+  return true;
 }
 
-
-QDomNode MainWindow::FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item){
-    if(clicked_item->parent()){
-        QDomNode xml_dom_node=this->FindNecessaryDomNodeR(clicked_item->parent());
-        return xml_dom_node.childNodes().item(clicked_item->parent()->indexOfChild(clicked_item));
-    }
-    else {
-        return xml_document.firstChild().nextSibling();
-    }
+void MainWindow::SetCurrentFileName(const QString &file_name, bool untitled) {
+  file_name_ = file_name;
+  untitled_ = untitled;
+  UpdateWindowTitle();
 }
 
-
-void MainWindow::OnNodeQTreeWidgetPressed(QTreeWidgetItem *clicked_item, int column){
-    QDomNode xml_dom_node_to_display=this->FindNecessaryDomNodeR(clicked_item);
-    if (!xml_dom_node_to_display.isNull()){
-        ui->attributes_list->clear();
-        if(xml_dom_node_to_display.isElement()){
-            int attribute_tree_column_attribute=0;
-            int attribute_tree_column_value=1;
-            const int xml_attributes_count=2;
-            const QString xml_attributes[xml_attributes_count]={"name","number"};
-            for(int i=0;i<xml_attributes_count;i++){
-                if(xml_dom_node_to_display.toElement().hasAttribute(xml_attributes[i])){
-                    QTreeWidgetItem *attribute_tree_item=new QTreeWidgetItem(ui->attributes_list);
-                    attribute_tree_item->setText(attribute_tree_column_attribute,xml_attributes[i]);
-                    attribute_tree_item->setText(attribute_tree_column_value, xml_dom_node_to_display.toElement().attributeNode(xml_attributes[i]).value());
-                }
-            }
-        }
-    }
+void MainWindow::SetModified(bool modified) {
+  modified_ = modified;
+  ui_->actionSave->setEnabled(modified);
+  ui_->actionSaveAs->setEnabled(modified);
+  UpdateWindowTitle();
 }
 
-
-void MainWindow::BuildXmlNodeTreeR(QDomNode xml_dom_node,QTreeWidgetItem *node_tree_item){
-    while(!xml_dom_node.isNull()){
-        if (xml_dom_node.isElement()){
-            int node_tree_column_node=0;
-            node_tree_item->setText(node_tree_column_node, xml_dom_node.toElement().tagName());
-            node_tree_item->setIcon(0, QIcon(":/node_closed.png"));
-            if (xml_dom_node.hasChildNodes()){
-                node_tree_item->addChild(new QTreeWidgetItem());
-                BuildXmlNodeTreeR(xml_dom_node.firstChild(),node_tree_item->child(node_tree_item->childCount()-1));
-            }
-            if (!xml_dom_node.nextSibling().isNull()){
-                node_tree_item->parent()->addChild((new QTreeWidgetItem()));
-                node_tree_item=node_tree_item->parent()->child(node_tree_item->parent()->childCount()-1);
-            }
-        }
-        xml_dom_node=xml_dom_node.nextSibling();
-    }
+void MainWindow::UpdateWindowTitle() {
+  QString title = tr("xml36 - %1").arg(QFileInfo(file_name_).fileName());
+  if (modified_)
+    title.append("*");
+  setWindowTitle(title);
 }
 
+bool MainWindow::MaybeSave() {
+  if (modified_) {
+    QMessageBox::StandardButton result = QMessageBox::warning(this,
+      tr("xml36"),
+      tr("Документ '%1' был изменен.\n"
+         "Хотите ли вы его сохранить?").arg(QFileInfo(file_name_).fileName()),
+      QMessageBox::Save | QMessageBox::Discard | QMessageBox::Cancel);
 
-bool MainWindow::OpenXML(const QString &fileName){
-     QFile input_file(fileName);
-     if (!input_file.open(QFile::ReadOnly | QFile::Text))
-         return false;
-     if (!xml_document.setContent(&input_file)) {
-         input_file.close();
-         return false;
-     }
-     input_file.close();
-    QDomNode xml_dom_node = xml_document.firstChild();
-    QTreeWidgetItem *node_tree_item=new QTreeWidgetItem(ui->xml_tree);
-    if (node_tree_item) {
-      node_tree_item->setIcon(0, QIcon(":/node_closed.png"));
-      BuildXmlNodeTreeR(xml_dom_node, node_tree_item);
-    }
-   return true;
+    if (QMessageBox::Save == result)
+      return on_actionSave_triggered();
+
+    if (QMessageBox::Cancel == result)
+       return false;
+  }
+
+  SetModified(false);
+  return true;
 }
 
+void MainWindow::FreeXMLDocument() {
+  if (xml_doc_ptr_) {
+    xmlFreeDoc(xml_doc_ptr_);
+    xml_doc_ptr_ = 0;
+  }
 
-void MainWindow::setCurrentFile(const QString &fileName) {
-    currentFilePath = fileName;
-    setWindowModified(false);
+  ui_->xml_tree->clear();
+  ui_->attributes_list->clear();
 
-    QString shownName = currentFilePath;
-    if (true == currentFilePath.isEmpty())
-        shownName = tr("Безымянный.xml");
-    setWindowTitle("XML36 " +shownName);
+  ui_->actionAddNode->setEnabled(false);
+  ui_->actionRemoveNode->setEnabled(false);
+  ui_->actionAddAttribute->setEnabled(false);
+  ui_->actionRemoveAttribute->setEnabled(false);
+  ui_->actionEdit->setEnabled(false);
 }
-
-
-QString MainWindow::strippedName(const QString &fullName)
-{
-    return QFileInfo(fullName).fileName();
-}
-
 
 void MainWindow::on_xml_tree_itemExpanded(QTreeWidgetItem *item)
 {
     item->setIcon(0, QIcon(":/node_opened.png"));
 }
 
-
 void MainWindow::on_xml_tree_itemCollapsed(QTreeWidgetItem *item)
 {
     item->setIcon(0, QIcon(":/node_closed.png"));
 }
 
+xmlNodePtr  MainWindow::GetNode(QTreeWidgetItem *item) {
+  if (0 == item)
+    return 0;
 
-void MainWindow::on_actionNew_triggered()
-{
-      if (true == isDocumentModified)
-          MainWindow::maybeSave();
-      else {
-            xml_document.clear();
-            ui->attributes_list->clear();
-            ui->xml_tree->clear();
-            setCurrentFile("");
-    }
+  return (xmlNodePtr)((void*)item->data(0, Qt::UserRole).toLongLong());
 }
 
-
-bool MainWindow::maybeSave() {
-    QMessageBox::StandardButton alternative;
-    alternative = QMessageBox::warning(this, tr("XML36"),
-                 tr("Xml документ был изменен.\n"
-                    "Хотите сохранить изменения?"),
-                 QMessageBox::Save  | QMessageBox::Cancel);
-    if (alternative == QMessageBox::Save)
-        return saveFile(currentFilePath);
-    else if (alternative == QMessageBox::Cancel);
+bool MainWindow::SetNode(QTreeWidgetItem *item, xmlNodePtr node) {
+  if (0 == item)
     return false;
+
+  item->setData(0, Qt::UserRole, (qint64)node);
+  return true;
 }
 
+void MainWindow::on_actionAddNode_triggered() {
+  if (0 == xml_doc_ptr_)
+    return;
 
-bool MainWindow::saveAs() {
-    QString fileName = QFileDialog::getSaveFileName(this,
-                                                    tr("Сохранить файл"),
-                                                    QDir::currentPath(),
-                                                    tr("Xml-files (*.xml)"));
-    if (true == fileName.isEmpty())
-        return false;
-    return saveFile(fileName);
-}
+  AddNodeDialog dialog;
+  if (QDialog::Accepted != dialog.exec())
+    return;
 
+  QString node_name = dialog.GetNodeName();
+  xmlNodePtr new_node = xmlNewNode(0, BAD_CAST node_name.toUtf8().data());
+  if (0 == new_node) {
+    QMessageBox::critical(this, tr("Создание узла XML"),
+                          tr("Ошибка создания узла %1").arg(node_name),
+                          QMessageBox::Ok);
+    return;
+  }
 
-bool MainWindow::saveFile(const QString &fileName) {
-    isDocumentModified = false;
-    QFile file(fileName);
-    if (false == file.open(QFile::ReadWrite | QFile::Text)) {
-        QMessageBox::warning(this, tr("XML36"),
-                             tr("Невозможно сохранить файл %1\n.")
-                             //.arg(fileName)
-                             .arg(file.errorString()));
-        return false;
+  xmlNodePtr root_node = xmlDocGetRootElement(xml_doc_ptr_);
+  if (0 == root_node) { // Пустой документ
+    xmlDocSetRootElement(xml_doc_ptr_, new_node);
+  } else {
+    QTreeWidgetItem *current_item = ui_->xml_tree->currentItem();
+    xmlNodePtr parent_node = current_item ? GetNode(current_item): root_node;
+    if (0 == xmlAddChild(parent_node, new_node)) {
+      QMessageBox::critical(this, tr("Создание узла XML"),
+                            tr("Ошибка создания дочернего узла %1")
+                              .arg(node_name),
+                            QMessageBox::Ok);
+      return;
     }
+  }
 
-    QTextStream out(&file);
-
-    QApplication::setOverrideCursor(Qt::WaitCursor);
-    out << xml_document << endl;
-    QApplication::restoreOverrideCursor();
-
-    setCurrentFile(fileName);
-    QMessageBox::information(this,tr("XML36"),tr("Файл был успешно сохранен").arg(fileName));
-    return true;
-}
-
-
-bool MainWindow::on_actionSaveAs_triggered()
-{
-    QString fileName = QFileDialog::getSaveFileName(this);
-    if (true == fileName.isEmpty())
-        return false;
-
-    return saveFile(fileName);
-}
-
-
-bool MainWindow::on_actionSave_triggered()
-{
-    if (true == currentFilePath.isEmpty())
-        return saveAs();
-    else
-        saveFile(currentFilePath);
-}
-
-
-void MainWindow::on_attributes_list_doubleClicked(const QModelIndex &index)
-{
-    qDebug()<<"double clicked"<<endl;
-    bool okKey;
-    QString newItem = QInputDialog::getText(this,
-                                            tr("Редактирование атрибута"),
-                                            tr("Введите новое значение атрибута"),
-                                            QLineEdit::Normal,
-                                            tr("Новый атрибут"), &okKey);
-    if (true == okKey) {
-        QString oldItem = ui -> attributes_list -> currentItem() ->text(index.column());
-        ui -> attributes_list -> currentItem() -> setText(index.column() ,newItem);
-    }
-        ui->actionSave->setEnabled(true);
+  SetModified(true);
 }

@@ -25,12 +25,12 @@ debug {
   OBJECTS_DIR = $${TEMP}/release
 }
 
-#win32 {
-#} else {
-#  INCLUDEPATH += /usr/include/libxml2\
-#                 /usr/include
-#  LIBS +=	-lxml2
-#}
+win32 {
+} else {
+  INCLUDEPATH += /usr/include/libxml2\
+                 /usr/include
+  LIBS +=	-lxml2
+}
 
 RCC_DIR = ./res
 
@@ -40,8 +40,11 @@ RESOURCES = ./res/resource.qrc
 MOC_DIR = $${OBJECTS_DIR}
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    addnodedialog.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    addnodedialog.h
 
-FORMS    += mainwindow.ui
+FORMS    += mainwindow.ui \
+    addnodedialog.ui

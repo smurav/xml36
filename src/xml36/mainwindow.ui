@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>XML36</string>
+   <string>xml36</string>
   </property>
   <property name="windowIcon">
    <iconset resource="res/resource.qrc">
@@ -65,7 +65,7 @@
      <x>0</x>
      <y>0</y>
      <width>842</width>
-     <height>25</height>
+     <height>26</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -96,6 +96,9 @@
    <addaction name="menuXML"/>
   </widget>
   <widget class="QToolBar" name="mainToolBar">
+   <property name="enabled">
+    <bool>true</bool>
+   </property>
    <property name="iconSize">
     <size>
      <width>16</width>
@@ -142,7 +145,7 @@
   </action>
   <action name="actionSave">
    <property name="enabled">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="icon">
     <iconset resource="res/resource.qrc">
@@ -156,11 +159,17 @@
    </property>
   </action>
   <action name="actionSaveAs">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="text">
     <string>Сохранить как ...</string>
    </property>
   </action>
   <action name="actionAddAttribute">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="res/resource.qrc">
      <normaloff>:/attribute_add.png</normaloff>:/attribute_add.png</iconset>
@@ -173,6 +182,9 @@
    </property>
   </action>
   <action name="actionRemoveAttribute">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="res/resource.qrc">
      <normaloff>:/attribute_remove.png</normaloff>:/attribute_remove.png</iconset>
@@ -185,6 +197,9 @@
    </property>
   </action>
   <action name="actionEdit">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="res/resource.qrc">
      <normaloff>:/pencil.png</normaloff>:/pencil.png</iconset>
@@ -205,6 +220,9 @@
    </property>
   </action>
   <action name="actionAddNode">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="res/resource.qrc">
      <normaloff>:/node_add.png</normaloff>:/node_add.png</iconset>
@@ -217,6 +235,9 @@
    </property>
   </action>
   <action name="actionRemoveNode">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
    <property name="icon">
     <iconset resource="res/resource.qrc">
      <normaloff>:/node_remove.png</normaloff>:/node_remove.png</iconset>

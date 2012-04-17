@@ -3,8 +3,9 @@
 
 #include <QMainWindow>
 #include <QTreeWidgetItem>
-#include <QDomDocument>
 #include <QString>
+#include "libxml/xmlreader.h"
+#include "libxml/xpath.h"
 
 namespace Ui {
     class MainWindow;
@@ -17,35 +18,36 @@ class MainWindow : public QMainWindow {
   explicit MainWindow(QWidget *parent = 0);
   ~MainWindow();
 
+ protected:
+  void closeEvent(QCloseEvent *event);
+
  private slots:
-  void on_actionOpen_triggered();
-  void OnNodeQTreeWidgetPressed( QTreeWidgetItem *clicked_item, int column );
-  void on_xml_tree_itemExpanded(QTreeWidgetItem *item);
-  void on_xml_tree_itemCollapsed(QTreeWidgetItem *item);
   void on_actionNew_triggered();
+  void on_actionOpen_triggered();
   bool on_actionSave_triggered();
   bool on_actionSaveAs_triggered();
+  void on_xml_tree_itemExpanded(QTreeWidgetItem *item);
+  void on_xml_tree_itemCollapsed(QTreeWidgetItem *item);
 
-  void on_attributes_list_doubleClicked(const QModelIndex &index);
+  void on_actionAddNode_triggered();
 
 private:
-  bool OpenXML(const QString &fileName);
-  QDomNode FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item);
-  QDomNode FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item, int &index_of_child_in_child_list);
-  void BuildXmlNodeTreeR(QDomNode xml_dom_node,QTreeWidgetItem *node_tree_item);
-
-  void setCurrentFile(const QString &fileName);
-  QString strippedName(const QString &fullName);
-
-  bool saveFile(const QString &file);
-  bool saveAs();
-  bool maybeSave();
+  bool OpenXMLDocument(const QString &file_name);
+  bool SaveXMLDocument(const QString &file_name);
+  void SetCurrentFileName(const QString &file_name, bool untitled);
+  void SetModified(bool modified);
+  void UpdateWindowTitle();
+  bool MaybeSave();
+  void FreeXMLDocument();
+  xmlNodePtr GetNode(QTreeWidgetItem *item);
+  bool SetNode(QTreeWidgetItem *item, xmlNodePtr node);
 
  private:
-  Ui::MainWindow *ui;
-  QDomDocument xml_document;
-  QString currentFilePath;         //текущий путь файла
-  bool isDocumentModified;
+  Ui::MainWindow *ui_;
+  QString         file_name_;   // Текущее имя файла
+  bool            untitled_;    // Имя файла явно не задано
+  bool            modified_;    // Присутствуют несохраненные изменения
+  xmlDocPtr       xml_doc_ptr_; // XML документ
 };
 
 #endif // MAINWINDOW_H

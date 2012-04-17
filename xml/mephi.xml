@@ -1,10 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mephi SYSTEM "mephi.dtd">
 <mephi>
+  <test/>
   <faculty name='А'>
   </faculty>
   <faculty name='Т'>
   </faculty>
+<<<<<<< HEAD
   <faculty name='К'> 
+=======
+  <faculty num='111s'>
+  <!--faculty name='К'-->
+>>>>>>> c01c9648b66514b5a4637dd4f208cb41baaba2cd
     <department name='Информационные системы и технологии' number='36'>
       <group name='K6-361'>
         <student name='Букарев Павел'/>

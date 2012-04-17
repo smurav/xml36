@@ -1,8 +1,8 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Sat Mar 10 19:42:16 2012
-**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.2)
+** Created: Tue Apr 17 18:29:19 2012
+**      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
@@ -11,7 +11,7 @@
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'mainwindow.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 62
-#error "This file was generated using the moc from 4.7.2. It"
+#error "This file was generated using the moc from 4.7.4. It"
 #error "cannot be used with the include files from this version of Qt."
 #error "(The moc has changed too much.)"
 #endif
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       1,   14, // methods
+       7,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -32,12 +32,24 @@ static const uint qt_meta_data_MainWindow[] = {
 
  // slots: signature, parameters, type, tag, flags
       12,   11,   11,   11, 0x08,
+      37,   11,   11,   11, 0x08,
+      68,   11,   63,   11, 0x08,
+      94,   11,   63,   11, 0x08,
+     127,  122,   11,   11, 0x08,
+     170,  122,   11,   11, 0x08,
+     214,   11,   11,   11, 0x08,
 
        0        // eod
 };
 
 static const char qt_meta_stringdata_MainWindow[] = {
-    "MainWindow\0\0on_actionOpen_triggered()\0"
+    "MainWindow\0\0on_actionNew_triggered()\0"
+    "on_actionOpen_triggered()\0bool\0"
+    "on_actionSave_triggered()\0"
+    "on_actionSaveAs_triggered()\0item\0"
+    "on_xml_tree_itemExpanded(QTreeWidgetItem*)\0"
+    "on_xml_tree_itemCollapsed(QTreeWidgetItem*)\0"
+    "on_actionAddNode_triggered()\0"
 };
 
 const QMetaObject MainWindow::staticMetaObject = {
@@ -69,10 +81,18 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         return _id;
     if (_c == QMetaObject::InvokeMetaMethod) {
         switch (_id) {
-        case 0: on_actionOpen_triggered(); break;
+        case 0: on_actionNew_triggered(); break;
+        case 1: on_actionOpen_triggered(); break;
+        case 2: { bool _r = on_actionSave_triggered();
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 3: { bool _r = on_actionSaveAs_triggered();
+            if (_a[0]) *reinterpret_cast< bool*>(_a[0]) = _r; }  break;
+        case 4: on_xml_tree_itemExpanded((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1]))); break;
+        case 5: on_xml_tree_itemCollapsed((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1]))); break;
+        case 6: on_actionAddNode_triggered(); break;
         default: ;
         }
-        _id -= 1;
+        _id -= 7;
     }
     return _id;
 }

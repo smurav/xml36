@@ -17,6 +17,10 @@
    <iconset resource="res/resource.qrc">
     <normaloff>:/xml.png</normaloff>:/xml.png</iconset>
   </property>
+  <property name="windowIcon">
+   <iconset resource="res/resource.qrc">
+    <normaloff>:/xml.png</normaloff>:/xml.png</iconset>
+  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="spacing">
@@ -65,7 +69,7 @@
      <x>0</x>
      <y>0</y>
      <width>842</width>
-     <height>26</height>
+     <height>25</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">

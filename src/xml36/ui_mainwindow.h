@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Tue Apr 17 18:19:26 2012
+** Created: Tue Apr 17 18:29:14 2012
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -58,6 +58,7 @@ public:
         MainWindow->resize(842, 535);
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/xml.png"), QSize(), QIcon::Normal, QIcon::Off);
+        MainWindow->setWindowIcon(icon);
         MainWindow->setWindowIcon(icon);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
@@ -133,7 +134,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 842, 26));
+        menuBar->setGeometry(QRect(0, 0, 842, 25));
         menu = new QMenu(menuBar);
         menu->setObjectName(QString::fromUtf8("menu"));
         menuXML = new QMenu(menuBar);

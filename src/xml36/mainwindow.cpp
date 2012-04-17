@@ -2,11 +2,17 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include <QFile>
+#include <QtXml/QDomDocument>
+#include <QtXml/QDomNode>
+#include <QtXml/QDomElement>
+#include <QtXml/QDomAttr>
+#include <QtXml/QDomNodeList>
 #include <QDebug>
 #include <QTreeWidgetItem>
 #include <QString>
 #include <QAbstractItemView>
 #include "addnodedialog.h"
+
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),

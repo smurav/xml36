@@ -47,3 +47,5 @@ HEADERS  += mainwindow.h \
 
 FORMS    += mainwindow.ui \
     addnodedialog.ui
+
+OTHER_FILES +=

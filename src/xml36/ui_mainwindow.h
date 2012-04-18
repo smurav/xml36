@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Tue Apr 17 18:29:14 2012
+** Created: Wed Apr 18 16:43:08 2012
 **      by: Qt User Interface Compiler version 4.7.4
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -40,6 +40,8 @@ public:
     QAction *actionExit;
     QAction *actionAddNode;
     QAction *actionRemoveNode;
+    QAction *actionLoadSchema;
+    QAction *actionCheckSchema;
     QWidget *centralWidget;
     QHBoxLayout *horizontalLayout;
     QSplitter *splitter;
@@ -58,7 +60,6 @@ public:
         MainWindow->resize(842, 535);
         QIcon icon;
         icon.addFile(QString::fromUtf8(":/xml.png"), QSize(), QIcon::Normal, QIcon::Off);
-        MainWindow->setWindowIcon(icon);
         MainWindow->setWindowIcon(icon);
         actionOpen = new QAction(MainWindow);
         actionOpen->setObjectName(QString::fromUtf8("actionOpen"));
@@ -111,6 +112,17 @@ public:
         QIcon icon8;
         icon8.addFile(QString::fromUtf8(":/node_remove.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionRemoveNode->setIcon(icon8);
+        actionLoadSchema = new QAction(MainWindow);
+        actionLoadSchema->setObjectName(QString::fromUtf8("actionLoadSchema"));
+        QIcon icon9;
+        icon9.addFile(QString::fromUtf8(":/xsd.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionLoadSchema->setIcon(icon9);
+        actionCheckSchema = new QAction(MainWindow);
+        actionCheckSchema->setObjectName(QString::fromUtf8("actionCheckSchema"));
+        actionCheckSchema->setEnabled(false);
+        QIcon icon10;
+        icon10.addFile(QString::fromUtf8(":/check.png"), QSize(), QIcon::Normal, QIcon::Off);
+        actionCheckSchema->setIcon(icon10);
         centralWidget = new QWidget(MainWindow);
         centralWidget->setObjectName(QString::fromUtf8("centralWidget"));
         horizontalLayout = new QHBoxLayout(centralWidget);
@@ -134,7 +146,7 @@ public:
         MainWindow->setCentralWidget(centralWidget);
         menuBar = new QMenuBar(MainWindow);
         menuBar->setObjectName(QString::fromUtf8("menuBar"));
-        menuBar->setGeometry(QRect(0, 0, 842, 25));
+        menuBar->setGeometry(QRect(0, 0, 842, 27));
         menu = new QMenu(menuBar);
         menu->setObjectName(QString::fromUtf8("menu"));
         menuXML = new QMenu(menuBar);
@@ -172,6 +184,9 @@ public:
         mainToolBar->addAction(actionAddAttribute);
         mainToolBar->addAction(actionRemoveAttribute);
         mainToolBar->addAction(actionEdit);
+        mainToolBar->addSeparator();
+        mainToolBar->addAction(actionLoadSchema);
+        mainToolBar->addAction(actionCheckSchema);
 
         retranslateUi(MainWindow);
         QObject::connect(actionExit, SIGNAL(triggered()), MainWindow, SLOT(close()));
@@ -216,6 +231,8 @@ public:
 #ifndef QT_NO_TOOLTIP
         actionRemoveNode->setToolTip(QApplication::translate("MainWindow", "\320\243\320\264\320\260\320\273\320\270\321\202\321\214 \321\203\320\267\320\265\320\273", 0, QApplication::UnicodeUTF8));
 #endif // QT_NO_TOOLTIP
+        actionLoadSchema->setText(QApplication::translate("MainWindow", "\320\227\320\260\320\263\321\200\321\203\320\267\320\270\321\202\321\214 \321\201\321\205\320\265\320\274\321\203", 0, QApplication::UnicodeUTF8));
+        actionCheckSchema->setText(QApplication::translate("MainWindow", "\320\237\321\200\320\276\320\262\320\265\321\200\320\270\321\202\321\214 \321\201\321\205\320\265\320\274\321\203", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem = xml_tree->headerItem();
         ___qtreewidgetitem->setText(0, QApplication::translate("MainWindow", "\320\243\320\267\320\265\320\273", 0, QApplication::UnicodeUTF8));
         QTreeWidgetItem *___qtreewidgetitem1 = attributes_list->headerItem();

@@ -17,10 +17,6 @@
    <iconset resource="res/resource.qrc">
     <normaloff>:/xml.png</normaloff>:/xml.png</iconset>
   </property>
-  <property name="windowIcon">
-   <iconset resource="res/resource.qrc">
-    <normaloff>:/xml.png</normaloff>:/xml.png</iconset>
-  </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <property name="spacing">
@@ -69,7 +65,7 @@
      <x>0</x>
      <y>0</y>
      <width>842</width>
-     <height>25</height>
+     <height>27</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -124,6 +120,9 @@
    <addaction name="actionAddAttribute"/>
    <addaction name="actionRemoveAttribute"/>
    <addaction name="actionEdit"/>
+   <addaction name="separator"/>
+   <addaction name="actionLoadSchema"/>
+   <addaction name="actionCheckSchema"/>
   </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
@@ -251,6 +250,27 @@
    </property>
    <property name="toolTip">
     <string>Удалить узел</string>
+   </property>
+  </action>
+  <action name="actionLoadSchema">
+   <property name="icon">
+    <iconset resource="res/resource.qrc">
+     <normaloff>:/xsd.png</normaloff>:/xsd.png</iconset>
+   </property>
+   <property name="text">
+    <string>Загрузить схему</string>
+   </property>
+  </action>
+  <action name="actionCheckSchema">
+   <property name="enabled">
+    <bool>false</bool>
+   </property>
+   <property name="icon">
+    <iconset resource="res/resource.qrc">
+     <normaloff>:/check.png</normaloff>:/check.png</iconset>
+   </property>
+   <property name="text">
+    <string>Проверить схему</string>
    </property>
   </action>
  </widget>

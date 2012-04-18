@@ -14,5 +14,7 @@
         <file>attribute_add.png</file>
         <file>attribute_remove.png</file>
         <file>xml.png</file>
+        <file>check.png</file>
+        <file>xsd.png</file>
     </qresource>
 </RCC>

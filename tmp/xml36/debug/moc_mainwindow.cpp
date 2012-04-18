@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Wed Apr 18 12:38:16 2012
+** Created: Wed Apr 18 16:51:42 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       9,   14, // methods
+      11,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -40,6 +40,8 @@ static const uint qt_meta_data_MainWindow[] = {
      214,   11,   11,   11, 0x08,
      260,  243,   11,   11, 0x08,
      326,  243,   11,   11, 0x08,
+     399,   11,   11,   11, 0x08,
+     431,   11,   11,   11, 0x08,
 
        0        // eod
 };
@@ -56,6 +58,8 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "on_xml_tree_currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)\0"
     "on_attributes_list_currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem"
     "*)\0"
+    "on_actionLoadSchema_triggered()\0"
+    "on_actionCheckSchema_triggered()\0"
 };
 
 const QMetaObject MainWindow::staticMetaObject = {
@@ -98,9 +102,11 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 6: on_actionAddNode_triggered(); break;
         case 7: on_xml_tree_currentItemChanged((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< QTreeWidgetItem*(*)>(_a[2]))); break;
         case 8: on_attributes_list_currentItemChanged((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< QTreeWidgetItem*(*)>(_a[2]))); break;
+        case 9: on_actionLoadSchema_triggered(); break;
+        case 10: on_actionCheckSchema_triggered(); break;
         default: ;
         }
-        _id -= 9;
+        _id -= 11;
     }
     return _id;
 }

@@ -35,6 +35,10 @@ class MainWindow : public QMainWindow {
 
   void on_attributes_list_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
 
+  void on_actionLoadSchema_triggered();
+
+  void on_actionCheckSchema_triggered();
+
 private:
   bool OpenXMLDocument(const QString &file_name);
   bool SaveXMLDocument(const QString &file_name);
@@ -43,6 +47,7 @@ private:
   void UpdateWindowTitle();
   bool MaybeSave();
   void FreeXMLDocument();
+  void FreeXMLSchema();
   xmlNodePtr GetNode(QTreeWidgetItem *item);
   bool AddItem(xmlNodePtr node, QTreeWidgetItem *parent_item = 0);
   void UpdateButtons();
@@ -53,6 +58,7 @@ private:
   bool            untitled_;    // Имя файла явно не задано
   bool            modified_;    // Присутствуют несохраненные изменения
   xmlDocPtr       xml_doc_ptr_; // XML документ
+  xmlSchemaValidCtxtPtr	 schema_valid_ctxt_;
 };
 
 #endif // MAINWINDOW_H

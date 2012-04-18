@@ -21,10 +21,12 @@ MainWindow::MainWindow(QWidget *parent) :
   untitled_ = false;
   modified_ = false;
   xml_doc_ptr_ = 0;
+  schema_valid_ctxt_ = 0;
 }
 
 MainWindow::~MainWindow() {
   FreeXMLDocument();
+  FreeXMLSchema();
   delete ui_;
   ui_ = 0;
 }
@@ -158,6 +160,13 @@ bool MainWindow::MaybeSave() {
 
   SetModified(false);
   return true;
+}
+
+void MainWindow::FreeXMLSchema() {
+  if (schema_valid_ctxt_) {
+    xmlSchemaFreeValidCtxt(schema_valid_ctxt_);
+    schema_valid_ctxt_ = 0;
+  }
 }
 
 void MainWindow::FreeXMLDocument() {
@@ -299,4 +308,50 @@ void MainWindow::on_xml_tree_currentItemChanged(QTreeWidgetItem *current,
 void MainWindow::on_attributes_list_currentItemChanged(QTreeWidgetItem */*current*/,
                                                        QTreeWidgetItem */*previous*/) {
   UpdateButtons();
+}
+
+void MainWindow::on_actionLoadSchema_triggered() {
+  FreeXMLSchema();
+  ui_->actionCheckSchema->setEnabled(false);
+  QString file_name = QFileDialog::getOpenFileName(this,
+                                                   tr("Выберите XML-схему"),
+                                                   "..",
+                                                   tr("XSD-файлы (*.xsd)"));
+  file_name.push_front("file://");
+  xmlSchemaParserCtxtPtr schema_parser = xmlSchemaNewParserCtxt(file_name.toUtf8().data());
+  if (0 == schema_parser)
+    return;
+
+  xmlSchemaPtr schema = xmlSchemaParse(schema_parser);
+  if (0 == schema) {
+    xmlSchemaFreeParserCtxt(schema_parser);
+    schema_parser = 0;
+    return;
+  }
+
+  schema_valid_ctxt_ = xmlSchemaNewValidCtxt(schema);
+  if (0 == schema_valid_ctxt_) {
+    xmlSchemaFreeParserCtxt(schema_parser);
+    schema_parser = 0;
+    xmlSchemaFree(schema);
+    schema = 0;
+    return;
+  }
+
+  ui_->actionCheckSchema->setEnabled(true);
+}
+
+void MainWindow::on_actionCheckSchema_triggered() {
+  if ((0 == schema_valid_ctxt_) || (0 == xml_doc_ptr_))
+    return;
+
+  if (0 == xmlSchemaValidateDoc(schema_valid_ctxt_, xml_doc_ptr_)) {
+    QMessageBox::critical(this, tr("Проверка схемы XML"),
+                             tr("Структура документа не соответствует схеме"),
+                             QMessageBox::Ok);
+  } else {
+    QMessageBox::information(this, tr("Проверка схемы XML"),
+                             tr("Структура документа корректна"),
+                             QMessageBox::Ok);
+  }
 }

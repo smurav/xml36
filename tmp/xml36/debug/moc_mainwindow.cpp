@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'mainwindow.h'
 **
-** Created: Tue Apr 17 18:29:19 2012
+** Created: Wed Apr 18 12:38:16 2012
 **      by: The Qt Meta Object Compiler version 62 (Qt 4.7.4)
 **
 ** WARNING! All changes made in this file will be lost!
@@ -23,7 +23,7 @@ static const uint qt_meta_data_MainWindow[] = {
        5,       // revision
        0,       // classname
        0,    0, // classinfo
-       7,   14, // methods
+       9,   14, // methods
        0,    0, // properties
        0,    0, // enums/sets
        0,    0, // constructors
@@ -38,6 +38,8 @@ static const uint qt_meta_data_MainWindow[] = {
      127,  122,   11,   11, 0x08,
      170,  122,   11,   11, 0x08,
      214,   11,   11,   11, 0x08,
+     260,  243,   11,   11, 0x08,
+     326,  243,   11,   11, 0x08,
 
        0        // eod
 };
@@ -50,6 +52,10 @@ static const char qt_meta_stringdata_MainWindow[] = {
     "on_xml_tree_itemExpanded(QTreeWidgetItem*)\0"
     "on_xml_tree_itemCollapsed(QTreeWidgetItem*)\0"
     "on_actionAddNode_triggered()\0"
+    "current,previous\0"
+    "on_xml_tree_currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem*)\0"
+    "on_attributes_list_currentItemChanged(QTreeWidgetItem*,QTreeWidgetItem"
+    "*)\0"
 };
 
 const QMetaObject MainWindow::staticMetaObject = {
@@ -90,9 +96,11 @@ int MainWindow::qt_metacall(QMetaObject::Call _c, int _id, void **_a)
         case 4: on_xml_tree_itemExpanded((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1]))); break;
         case 5: on_xml_tree_itemCollapsed((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1]))); break;
         case 6: on_actionAddNode_triggered(); break;
+        case 7: on_xml_tree_currentItemChanged((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< QTreeWidgetItem*(*)>(_a[2]))); break;
+        case 8: on_attributes_list_currentItemChanged((*reinterpret_cast< QTreeWidgetItem*(*)>(_a[1])),(*reinterpret_cast< QTreeWidgetItem*(*)>(_a[2]))); break;
         default: ;
         }
-        _id -= 7;
+        _id -= 9;
     }
     return _id;
 }

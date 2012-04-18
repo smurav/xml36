@@ -31,6 +31,10 @@ class MainWindow : public QMainWindow {
 
   void on_actionAddNode_triggered();
 
+  void on_xml_tree_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
+  void on_attributes_list_currentItemChanged(QTreeWidgetItem *current, QTreeWidgetItem *previous);
+
 private:
   bool OpenXMLDocument(const QString &file_name);
   bool SaveXMLDocument(const QString &file_name);
@@ -40,7 +44,8 @@ private:
   bool MaybeSave();
   void FreeXMLDocument();
   xmlNodePtr GetNode(QTreeWidgetItem *item);
-  bool SetNode(QTreeWidgetItem *item, xmlNodePtr node);
+  bool AddItem(xmlNodePtr node, QTreeWidgetItem *parent_item = 0);
+  void UpdateButtons();
 
  private:
   Ui::MainWindow *ui_;

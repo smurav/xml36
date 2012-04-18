@@ -1,6 +1,6 @@
 <!ELEMENT mephi (faculty+)>
 
-<!ELEMENT faculty (department+)>
+<!ELEMENT faculty (department*)>
 <!ATTLIST faculty name CDATA #REQUIRED>
 
 <!ELEMENT department (group+) >

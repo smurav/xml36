@@ -46,18 +46,19 @@ void MainWindow::on_actionNew_triggered() {
 
   FreeXMLDocument();
   xml_doc_ptr_ = xmlNewDoc(BAD_CAST "1.0");
-  ui_->actionAddNode->setEnabled(0 != xml_doc_ptr_);
+  UpdateButtons();
 }
 
 void MainWindow::on_actionOpen_triggered() {
   if (!MaybeSave())
     return;
 
-  QString file_name_ = QFileDialog::getOpenFileName(this,
-                                                    tr("Выберите XML-файл"),
-                                                    "..",
-                                                    tr("XML-файлы (*.xml)"));
-  OpenXMLDocument(file_name_);
+  QString file_name = QFileDialog::getOpenFileName(this,
+                                                   tr("Выберите XML-файл"),
+                                                   "..",
+                                                   tr("XML-файлы (*.xml)"));
+  SetCurrentFileName(file_name, false);
+  OpenXMLDocument(file_name);
 }
 
 bool MainWindow::on_actionSave_triggered() {
@@ -72,12 +73,33 @@ bool MainWindow::on_actionSaveAs_triggered() {
                                                    tr("Сохранить как"),
                                                    ".",
                                                    tr("XML-файлы (*.xml)"));
-
   return SaveXMLDocument(file_name);
 }
 
 bool MainWindow::OpenXMLDocument(const QString &file_name) {
   FreeXMLDocument();
+
+  xmlParserCtxtPtr parser = xmlNewParserCtxt();
+  if (0 == parser)
+    return false;
+
+  xml_doc_ptr_ = xmlCtxtReadFile(parser,
+                                 file_name.toLocal8Bit().data(),
+                                 NULL,
+                                 XML_PARSE_NOBLANKS | XML_PARSE_DTDVALID);
+  if (false == parser->valid) {
+    QMessageBox::critical(this, tr("Открытие XML документа"),
+                          tr("Структура файла %1 не соответствует "
+                          "DTD-диаграмме").arg(file_name),
+                          QMessageBox::Ok);
+    SetCurrentFileName("", false);
+    xmlFreeParserCtxt(parser);
+    FreeXMLDocument();
+    return false;
+  }
+  AddItem(xmlDocGetRootElement(xml_doc_ptr_));
+  xmlFreeParserCtxt(parser);
+  UpdateButtons();
   return true;
 }
 
@@ -96,7 +118,6 @@ bool MainWindow::SaveXMLDocument(const QString &file_name) {
   }
 
   SetCurrentFileName(file_name, false);
-  SetModified(false);
   return true;
 }
 
@@ -155,14 +176,38 @@ void MainWindow::FreeXMLDocument() {
   ui_->actionEdit->setEnabled(false);
 }
 
-void MainWindow::on_xml_tree_itemExpanded(QTreeWidgetItem *item)
-{
-    item->setIcon(0, QIcon(":/node_opened.png"));
+void MainWindow::UpdateButtons() {
+  ui_->actionAddNode->setEnabled(0 != xml_doc_ptr_);
+
+  bool node_selected = (0 != ui_->xml_tree->currentItem());
+  ui_->actionRemoveNode->setEnabled(node_selected);
+  ui_->actionAddAttribute->setEnabled(node_selected);
+
+  bool attribute_selected = (0 != ui_->attributes_list->currentItem());
+  ui_->actionRemoveAttribute->setEnabled(attribute_selected);
+  ui_->actionEdit->setEnabled(node_selected || attribute_selected);
 }
 
-void MainWindow::on_xml_tree_itemCollapsed(QTreeWidgetItem *item)
-{
-    item->setIcon(0, QIcon(":/node_closed.png"));
+void MainWindow::on_xml_tree_itemExpanded(QTreeWidgetItem *item) {
+  item->setIcon(0, QIcon(":/node_opened.png"));
+  for (int i = 0; i < item->childCount(); i++) {
+    item->removeChild(item->child(i));
+  }
+  xmlNodePtr current_node = GetNode(item);
+  if (0 == current_node)
+    return;
+  for (xmlNodePtr child_node = current_node->children;
+       0 != child_node;
+       child_node = child_node->next) {
+    AddItem(child_node, item);
+  }
+}
+
+void MainWindow::on_xml_tree_itemCollapsed(QTreeWidgetItem *item) {
+  item->setIcon(0, QIcon(":/node_closed.png"));
+  for (int i = 1; i < item->childCount(); i++) {
+    item->removeChild(item->child(i));
+  }
 }
 
 xmlNodePtr  MainWindow::GetNode(QTreeWidgetItem *item) {
@@ -172,11 +217,25 @@ xmlNodePtr  MainWindow::GetNode(QTreeWidgetItem *item) {
   return (xmlNodePtr)((void*)item->data(0, Qt::UserRole).toLongLong());
 }
 
-bool MainWindow::SetNode(QTreeWidgetItem *item, xmlNodePtr node) {
-  if (0 == item)
+bool MainWindow::AddItem(xmlNodePtr node, QTreeWidgetItem *parent_item) {
+  if (0 == node)
     return false;
 
-  item->setData(0, Qt::UserRole, (qint64)node);
+  QTreeWidgetItem *new_item = new QTreeWidgetItem();
+  new_item->setText(0, QString::fromUtf8((char *)node->name));
+  new_item->setIcon(0, QIcon(":/node_closed.png"));
+  new_item->setData(0, Qt::UserRole, (qint64)node);
+
+  if (node->children) { // Есть дочерние элементы
+    new_item->addChild(new QTreeWidgetItem());
+  }
+
+  if (parent_item) {
+    parent_item->addChild(new_item);
+  } else {
+    ui_->xml_tree->addTopLevelItem(new_item);
+  }
+  ui_->xml_tree->setCurrentItem(new_item, 0);
   return true;
 }
 
@@ -197,11 +256,12 @@ void MainWindow::on_actionAddNode_triggered() {
     return;
   }
 
+  QTreeWidgetItem *current_item = 0;
   xmlNodePtr root_node = xmlDocGetRootElement(xml_doc_ptr_);
   if (0 == root_node) { // Пустой документ
     xmlDocSetRootElement(xml_doc_ptr_, new_node);
   } else {
-    QTreeWidgetItem *current_item = ui_->xml_tree->currentItem();
+    current_item = ui_->xml_tree->currentItem();
     xmlNodePtr parent_node = current_item ? GetNode(current_item): root_node;
     if (0 == xmlAddChild(parent_node, new_node)) {
       QMessageBox::critical(this, tr("Создание узла XML"),
@@ -212,5 +272,31 @@ void MainWindow::on_actionAddNode_triggered() {
     }
   }
 
+  AddItem(new_node, current_item);
   SetModified(true);
+}
+
+void MainWindow::on_xml_tree_currentItemChanged(QTreeWidgetItem *current,
+                                                QTreeWidgetItem */*previous*/) {
+  ui_->attributes_list->clear();
+
+  xmlNodePtr current_node = GetNode(current);
+  if ((0 == current_node) || (0 == current_node->properties))
+    return;
+  for (xmlAttrPtr attribute = current_node->properties;
+       0 != attribute;
+       attribute = attribute->next) {
+    QTreeWidgetItem *new_item = new QTreeWidgetItem();
+    new_item->setText(0, QString::fromUtf8((char *)attribute->name));
+    QString value = QString::fromUtf8((char *)xmlGetProp(current_node,
+                                                         attribute->name));
+    new_item->setText(1, value);
+    ui_->attributes_list->addTopLevelItem(new_item);
+  }
+  UpdateButtons();
+}
+
+void MainWindow::on_attributes_list_currentItemChanged(QTreeWidgetItem */*current*/,
+                                                       QTreeWidgetItem */*previous*/) {
+  UpdateButtons();
 }

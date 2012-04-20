@@ -1,39 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
-
   <xs:element name="mephi">
     <xs:complexType>
       <xs:sequence>
-        <xs:element name="faculty" maxOccurs="unbounded">
-          <xs:complexType>
-            <xs:sequence>
-              <xs:attribute name="name" type="xs:string"/>
-              <xs:element name="department" type="department" minOccurs="0" maxOccurs="unbounded">
-            </xs:sequence>
-          </xs:complexType>
-        </xs:element>
-      </xs:sequence>
+        <xs:element name="faculty" type="faculty" minOccurs="1" maxOccurs="unbounded"/>
+      </xs:sequence>       
     </xs:complexType>
   </xs:element>
 
+  <xs:complexType name="faculty">
+    <xs:sequence>
+      <xs:element name="department" type="department" minOccurs="0" maxOccurs="unbounded"/>
+    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+  </xs:complexType>
+
   <xs:complexType name="department">
     <xs:sequence>
-      <xs:attribute name="name" type="xs:string"/>
-      <xs:attribute name="number" type="xs:decimal"/>
       <xs:element name="group" type="group" minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
+    <xs:attribute name="number" type="xs:decimal"/>
   </xs:complexType>
 
   <xs:complexType name="group">
     <xs:sequence>
-      <xs:attribute name="name" type="xs:string"/>
       <xs:element name="student" type="student" minOccurs="1" maxOccurs="unbounded"/>
     </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
   </xs:complexType>
 
   <xs:complexType name="student">
-    <xs:sequence>
-      <xs:attribute name="name" type="xs:string"/>
-    </xs:sequence>
+    <xs:attribute name="name" type="xs:string"/>
   </xs:complexType>
 
 </xs:schema>
+

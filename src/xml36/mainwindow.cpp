@@ -75,6 +75,9 @@ bool MainWindow::on_actionSaveAs_triggered() {
                                                    tr("Сохранить как"),
                                                    ".",
                                                    tr("XML-файлы (*.xml)"));
+  if (0 == file_name.length())
+    return false;
+
   return SaveXMLDocument(file_name);
 }
 
@@ -88,7 +91,7 @@ bool MainWindow::OpenXMLDocument(const QString &file_name) {
   xml_doc_ptr_ = xmlCtxtReadFile(parser,
                                  file_name.toLocal8Bit().data(),
                                  NULL,
-                                 XML_PARSE_NOBLANKS | XML_PARSE_DTDVALID);
+                                 XML_PARSE_NOBLANKS);// | XML_PARSE_DTDVALID);
   if (false == parser->valid) {
     QMessageBox::critical(this, tr("Открытие XML документа"),
                           tr("Структура файла %1 не соответствует "
@@ -120,6 +123,7 @@ bool MainWindow::SaveXMLDocument(const QString &file_name) {
   }
 
   SetCurrentFileName(file_name, false);
+  SetModified(false);
   return true;
 }
 
@@ -223,7 +227,8 @@ xmlNodePtr  MainWindow::GetNode(QTreeWidgetItem *item) {
   if (0 == item)
     return 0;
 
-  return (xmlNodePtr)((void*)item->data(0, Qt::UserRole).toLongLong());
+  qlonglong data = item->data(0, Qt::UserRole).toLongLong();
+  return (xmlNodePtr)((void*)data);
 }
 
 bool MainWindow::AddItem(xmlNodePtr node, QTreeWidgetItem *parent_item) {
@@ -233,7 +238,7 @@ bool MainWindow::AddItem(xmlNodePtr node, QTreeWidgetItem *parent_item) {
   QTreeWidgetItem *new_item = new QTreeWidgetItem();
   new_item->setText(0, QString::fromUtf8((char *)node->name));
   new_item->setIcon(0, QIcon(":/node_closed.png"));
-  new_item->setData(0, Qt::UserRole, (qint64)node);
+  new_item->setData(0, Qt::UserRole, (qlonglong)node);
 
   if (node->children) { // Есть дочерние элементы
     new_item->addChild(new QTreeWidgetItem());
@@ -244,7 +249,7 @@ bool MainWindow::AddItem(xmlNodePtr node, QTreeWidgetItem *parent_item) {
   } else {
     ui_->xml_tree->addTopLevelItem(new_item);
   }
-  ui_->xml_tree->setCurrentItem(new_item, 0);
+  //ui_->xml_tree->setCurrentItem(new_item, 0);
   return true;
 }
 
@@ -317,7 +322,7 @@ void MainWindow::on_actionLoadSchema_triggered() {
                                                    tr("Выберите XML-схему"),
                                                    "..",
                                                    tr("XSD-файлы (*.xsd)"));
-  file_name.push_front("file://");
+  //file_name.push_front("file://");
   xmlSchemaParserCtxtPtr schema_parser = xmlSchemaNewParserCtxt(file_name.toUtf8().data());
   if (0 == schema_parser)
     return;
@@ -346,12 +351,12 @@ void MainWindow::on_actionCheckSchema_triggered() {
     return;
 
   if (0 == xmlSchemaValidateDoc(schema_valid_ctxt_, xml_doc_ptr_)) {
-    QMessageBox::critical(this, tr("Проверка схемы XML"),
-                             tr("Структура документа не соответствует схеме"),
-                             QMessageBox::Ok);
-  } else {
     QMessageBox::information(this, tr("Проверка схемы XML"),
                              tr("Структура документа корректна"),
+                             QMessageBox::Ok);
+  } else {
+    QMessageBox::critical(this, tr("Проверка схемы XML"),
+                             tr("Структура документа не соответствует схеме"),
                              QMessageBox::Ok);
   }
 }

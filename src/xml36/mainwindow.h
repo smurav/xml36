@@ -36,12 +36,17 @@ class MainWindow : public QMainWindow {
 
 private:
   bool OpenXML(const QString &fileName);
-  QDomNode FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item);
-  QDomNode FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item, int &index_of_child_in_child_list);
+  void CreateTreeRootWithCurrentXMLDocument();
+  QTreeWidgetItem* CreateNewTreeWidgetElement(QDomNode);
+  QTreeWidgetItem* CreateNewTreeWidgetAttribute(QDomNode);
+//  QDomNode FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item);
+//  QDomNode FindNecessaryDomNodeR(QTreeWidgetItem *clicked_item, int &index_of_child_in_child_list);
   void BuildXmlNodeTreeR(QDomNode xml_dom_node,QTreeWidgetItem *node_tree_item);
   void ClearDocumentAndTreesPointers();
   void ClearDocumentAndTrees();
   bool ShowMessageBoxOfferingToSaveData();  //return false in case of cancel clicked
+
+  bool Valid();
 
  private:
   Ui::MainWindow *ui;
@@ -51,7 +56,6 @@ private:
   QTreeWidgetItem *current_element_tree_item;
   QTreeWidgetItem *last_current_tree_item_clicked;
   QString current_working_file_name;
-  bool document_is_modified;
   bool edit_mode_is_on;
 };
 

@@ -6,6 +6,7 @@
 
 QT       += core gui
 QT += xml
+QT +=xmlpatterns
 TARGET = xml36
 TEMPLATE = app
 

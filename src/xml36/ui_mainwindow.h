@@ -1,7 +1,7 @@
 /********************************************************************************
 ** Form generated from reading UI file 'mainwindow.ui'
 **
-** Created: Mon Mar 26 09:22:46 2012
+** Created: Tue Mar 27 21:32:51 2012
 **      by: Qt User Interface Compiler version 4.8.0
 **
 ** WARNING! All changes made in this file will be lost when recompiling UI file!
@@ -83,6 +83,7 @@ public:
         actionDelete->setIcon(icon4);
         actionEdit = new QAction(MainWindow);
         actionEdit->setObjectName(QString::fromUtf8("actionEdit"));
+        actionEdit->setCheckable(true);
         QIcon icon5;
         icon5.addFile(QString::fromUtf8(":/pencil.png"), QSize(), QIcon::Normal, QIcon::Off);
         actionEdit->setIcon(icon5);

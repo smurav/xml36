@@ -14,7 +14,7 @@
    <string>xml36</string>
   </property>
   <property name="windowIcon">
-   <iconset resource="res/resource.qrc">
+   <iconset>
     <normaloff>:/xml.png</normaloff>:/xml.png</iconset>
   </property>
   <widget class="QWidget" name="centralWidget">
@@ -65,7 +65,7 @@
      <x>0</x>
      <y>0</y>
      <width>842</width>
-     <height>27</height>
+     <height>21</height>
     </rect>
    </property>
    <widget class="QMenu" name="menu">
@@ -127,7 +127,7 @@
   <widget class="QStatusBar" name="statusBar"/>
   <action name="actionOpen">
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/open.png</normaloff>:/open.png</iconset>
    </property>
    <property name="text">
@@ -136,7 +136,7 @@
   </action>
   <action name="actionNew">
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/new.png</normaloff>:/new.png</iconset>
    </property>
    <property name="text">
@@ -151,7 +151,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/save.png</normaloff>:/save.png</iconset>
    </property>
    <property name="text">
@@ -174,7 +174,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/attribute_add.png</normaloff>:/attribute_add.png</iconset>
    </property>
    <property name="text">
@@ -189,7 +189,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/attribute_remove.png</normaloff>:/attribute_remove.png</iconset>
    </property>
    <property name="text">
@@ -204,7 +204,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/pencil.png</normaloff>:/pencil.png</iconset>
    </property>
    <property name="text">
@@ -227,7 +227,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/node_add.png</normaloff>:/node_add.png</iconset>
    </property>
    <property name="text">
@@ -242,7 +242,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/node_remove.png</normaloff>:/node_remove.png</iconset>
    </property>
    <property name="text">
@@ -254,7 +254,7 @@
   </action>
   <action name="actionLoadSchema">
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/xsd.png</normaloff>:/xsd.png</iconset>
    </property>
    <property name="text">
@@ -266,7 +266,7 @@
     <bool>false</bool>
    </property>
    <property name="icon">
-    <iconset resource="res/resource.qrc">
+    <iconset>
      <normaloff>:/check.png</normaloff>:/check.png</iconset>
    </property>
    <property name="text">
@@ -275,9 +275,7 @@
   </action>
  </widget>
  <layoutdefault spacing="6" margin="11"/>
- <resources>
-  <include location="res/resource.qrc"/>
- </resources>
+ <resources/>
  <connections>
   <connection>
    <sender>actionExit</sender>

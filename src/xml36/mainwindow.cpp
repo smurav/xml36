@@ -17,7 +17,7 @@
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
-{
+{//
     ui->setupUi(this);
     ui->actionSave->setEnabled(false);
     edit_mode_is_on=false;
